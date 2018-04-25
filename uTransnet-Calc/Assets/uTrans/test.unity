@@ -2354,13 +2354,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1234826371}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 310a5adff23a91149a0a279ddbf2c146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 75090401}
-  _spawnScale: 10
+  _spawnScale: 11
   _markerPrefab: {fileID: 1863564417043012, guid: 2a6aacf8db9795642bc5917ce051837f,
     type: 2}
   cam: {fileID: 1432818142}
