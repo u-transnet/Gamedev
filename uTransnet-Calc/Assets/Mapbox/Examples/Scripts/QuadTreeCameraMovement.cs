@@ -25,7 +25,10 @@
 		[SerializeField]
 		bool _useDegreeMethod;
 
-		private Vector3 _origin;
+        [SerializeField]
+        SpawnOnMapD _buildingManager;
+
+        private Vector3 _origin;
 		private Vector3 _mousePosition;
 		private Vector3 _mousePositionPrevious;
 		private bool _shouldDrag;
@@ -151,7 +154,7 @@
 
 		void UseMeterConversion()
 		{
-			if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+			if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject() && !_buildingManager.PointerUsed)
 			{
 				var mousePosScreen = Input.mousePosition;
 				//assign distance of camera to ground plane to z, otherwise ScreenToWorldPoint() will always return the position of the camera
@@ -210,7 +213,7 @@
 
 		void UseDegreeConversion()
 		{
-			if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+			if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject() && !_buildingManager.PointerUsed)
 			{
 				var mousePosScreen = Input.mousePosition;
 				//assign distance of camera to ground plane to z, otherwise ScreenToWorldPoint() will always return the position of the camera

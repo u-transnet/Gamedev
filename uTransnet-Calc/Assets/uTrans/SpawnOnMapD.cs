@@ -6,59 +6,93 @@
 	using Mapbox.Unity.MeshGeneration.Factories;
 	using Mapbox.Unity.Utilities;
 	using System.Collections.Generic;
+    using UnityEngine.UI;
 
-	public class SpawnOnMapD : MonoBehaviour
-	{
-		[SerializeField]
-		AbstractMap _map;
-        
-		List<Vector2d> _locations;
+    public class SpawnOnMapD : MonoBehaviour
+    {
+        [SerializeField]
+        AbstractMap _map;
 
-		[SerializeField]
-		float _spawnScale = 100f;
-
-		[SerializeField]
-		GameObject _markerPrefab;
+        [SerializeField]
+        GameObject _markerPrefab;
 
         [SerializeField]
         Camera cam;
 
-		List<GameObject> _spawnedObjects;
+        [SerializeField]
+        public Button pointButton;
 
-		void Start()
-		{
-			_locations = new List<Vector2d>();
-			_spawnedObjects = new List<GameObject>();
-		}
+        [SerializeField]
+        public Button yesButton;
 
-		private void Update()
-		{
-            if (Input.GetButtonDown("Fire1"))
+        [SerializeField]
+        public Button noButton;
+
+        [SerializeField]
+        public Button linkButton;
+
+        private GameObject activePoint = null;
+
+        public bool PointerUsed { get; set; }
+
+        void Start()
+        {
+            pointButton.GetComponent<Button>().onClick.AddListener(SpawnOnCenter);
+            yesButton.GetComponent<Button>().onClick.AddListener(ConfirmPoint);
+            noButton.GetComponent<Button>().onClick.AddListener(RemoveActivePoint);
+
+            PointerUsed = false;
+        }
+
+        private void Update() {
+		
+            if (activePoint != null)
             {
-                var mousePos = Input.mousePosition;
-                //mousePos.z = 2.0;       // we want 2m away from the camera position
-                var objectPos = cam.ScreenToWorldPoint(mousePos);
-                _locations.Add(Spawn(objectPos));
+                yesButton.interactable = !activePoint.GetComponent<CollidingObject>().colliding;
             }
-
-            int count = _spawnedObjects.Count;
-			for (int i = 0; i < count; i++)
-			{
-				var spawnedObject = _spawnedObjects[i];
-				var location = _locations[i];
-				spawnedObject.transform.localPosition = _map.GeoToWorldPosition(location, true);
-				spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-			}
-		}
+            else
+            {
+                yesButton.interactable = false;
+            }
+        }
 
         private Vector2d Spawn(Vector3 pos)
         {
             var _location = _map.WorldToGeoPosition(pos);
-            var instance = Instantiate(_markerPrefab);
-            instance.transform.localPosition = _map.GeoToWorldPosition(_location, true);
-            instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-            _spawnedObjects.Add(instance);
+            activePoint = Instantiate(_markerPrefab);
+            var node = activePoint.GetComponent<OnMapObject>();
+            node.Map = _map;
+            node.NewPos(pos);
+            node.GetComponent<DraggableObject>().BuildingManager = this;
             return _location;
+        }
+
+        public void SpawnOnCenter()
+        {
+            pointButton.interactable = false;
+            noButton.interactable = true;
+            var mousePos = Input.mousePosition;
+            var objectPos = cam.ScreenToWorldPoint(mousePos);
+            Spawn(objectPos);
+        }
+
+        public void ConfirmPoint()
+        {
+            pointButton.interactable = true;
+            noButton.interactable = false;
+
+            activePoint.GetComponent<DraggableObject>().enabled = false;
+            activePoint.GetComponent<CollidingObject>().Disable();
+
+            activePoint = null;
+
+        }
+
+        public void RemoveActivePoint()
+        {
+            Destroy(activePoint);
+            pointButton.interactable = true;
+            noButton.interactable = false;
         }
 	}
 }
