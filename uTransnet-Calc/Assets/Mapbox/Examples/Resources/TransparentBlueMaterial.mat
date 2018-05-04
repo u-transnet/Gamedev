@@ -74,6 +74,8 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.2
     - _GlossyReflections: 0
+    - _IntersectionDamper: 0.036
+    - _IntersectionMax: 0.01
     - _InvFade: 1
     - _Metallic: 0
     - _Mode: 2
@@ -88,6 +90,8 @@ Material:
     - _Color: {r: 0.18382353, g: 0.39208913, b: 1, a: 0.747}
     - _EmissionColor: {r: 0.000540658, g: 0.019165365, b: 0.07352942, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _IntersectionColor: {r: 0.39705884, g: 0.401217, b: 1, a: 1}
+    - _MainColor: {r: 0.75456387, g: 0.6764706, b: 1, a: 0.913}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0, g: 0, b: 0, a: 1}
     - _TintColor: {r: 0.16911763, g: 0.16911763, b: 0.16911763, a: 0.228}

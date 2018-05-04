@@ -6,6 +6,8 @@ TagManager:
   tags:
   - building
   - structure
+  - terrain
+  - link
   layers:
   - Default
   - TransparentFX

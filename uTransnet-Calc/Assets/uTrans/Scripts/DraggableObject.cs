@@ -13,9 +13,7 @@ public class DraggableObject : MonoBehaviour {
     private bool dragging = false;
     private float distance;
 
-
-    [SerializeField]
-    EventSystem m_EventSystem;
+   
 
     public SpawnOnMapD BuildingManager { get; set; }
 
@@ -25,7 +23,6 @@ public class DraggableObject : MonoBehaviour {
     void Start ()
     {
         uObject = GetComponent<OnMapObject>();
-        m_EventSystem = EventSystem.current;
     }
 	
 	// Update is called once per frame

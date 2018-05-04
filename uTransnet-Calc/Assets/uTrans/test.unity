@@ -203,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _panSpeed: 1
   _zoomSpeed: 0.25
+  _maxZoom: 16.9
   _referenceCamera: {fileID: 1432818142}
   _mapManager: {fileID: 75090401}
   _useDegreeMethod: 0
@@ -2299,7 +2300,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1105459086}
   m_OnClick:
     m_PersistentCalls:
@@ -2811,6 +2812,31 @@ Prefab:
       propertyPath: _terrain._layerProperty.sideWallOptions.isActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114196496685157712, guid: 5bb46bae81bf04608ac699be504c5e66,
+        type: 2}
+      propertyPath: _options.scalingOptions.scalingType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114196496685157712, guid: 5bb46bae81bf04608ac699be504c5e66,
+        type: 2}
+      propertyPath: _options.scalingOptions.unityTileSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114196496685157712, guid: 5bb46bae81bf04608ac699be504c5e66,
+        type: 2}
+      propertyPath: _terrain._layerProperty.modificationOptions.useRelativeHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114196496685157712, guid: 5bb46bae81bf04608ac699be504c5e66,
+        type: 2}
+      propertyPath: _terrain._layerProperty.modificationOptions.earthRadius
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 114196496685157712, guid: 5bb46bae81bf04608ac699be504c5e66,
+        type: 2}
+      propertyPath: _terrain._layerProperty.sourceType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5bb46bae81bf04608ac699be504c5e66, type: 2}
   m_IsPrefabParent: 0
@@ -2842,13 +2868,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 75090401}
-  _markerPrefab: {fileID: 1863564417043012, guid: 2a6aacf8db9795642bc5917ce051837f,
+  _markerPrefab: {fileID: 1849870949341162, guid: 2a6aacf8db9795642bc5917ce051837f,
+    type: 2}
+  _linkPrefab: {fileID: 1901528573172184, guid: 65c13c345a953ca47b9b46f1d8bd7e4e,
     type: 2}
   cam: {fileID: 1432818142}
   pointButton: {fileID: 2051213494}
   yesButton: {fileID: 1482527568}
   noButton: {fileID: 612528634}
-  linkButton: {fileID: 1105459085}
+  doneButton: {fileID: 1105459085}
 --- !u!4 &1234826373
 Transform:
   m_ObjectHideFlags: 0
@@ -2857,7 +2885,7 @@ Transform:
   m_GameObject: {fileID: 1234826371}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -2965,7 +2993,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: Done
 --- !u!222 &1307435558
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3246,8 +3274,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 256
+  orthographic: 1
+  orthographic size: 128
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3470,6 +3498,7 @@ GameObject:
   - component: {fileID: 1574477216}
   - component: {fileID: 1574477218}
   - component: {fileID: 1574477217}
+  - component: {fileID: 1574477219}
   m_Layer: 5
   m_Name: EventSystem
   m_TagString: Untagged
@@ -3530,6 +3559,38 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
+--- !u!114 &1574477219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1574477215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bf0b03efeff65489be2db634ad8711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  longPress:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1234826372}
+        m_MethodName: OnLongPress
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: LongPressEventManager+LongPressEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  click:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: LongPressEventManager+ClickEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1603751691
 GameObject:
   m_ObjectHideFlags: 0
