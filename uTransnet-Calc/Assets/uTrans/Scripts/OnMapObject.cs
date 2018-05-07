@@ -22,12 +22,6 @@ public class OnMapObject : MonoBehaviour
         transform.localScale = new Vector3(curScale, curScale, curScale);
     }
 
-    // Use this for initialization
-    protected void Start()
-    {
-
-    }
-
     // Update is called once per frame
     protected virtual void Update()
     {

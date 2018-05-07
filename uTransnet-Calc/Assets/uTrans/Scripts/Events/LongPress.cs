@@ -71,7 +71,7 @@ public class LongPress : MonoBehaviour
                     }
                     else
                     {
-                        // this is a long press or drag​
+                        // this is a long press
                         OnLongPress();
                     }
                 }

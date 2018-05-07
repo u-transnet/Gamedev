@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class BaseObject : MonoBehaviour
 {
@@ -9,6 +8,8 @@ public class BaseObject : MonoBehaviour
     CollidingObject collidingObject;
     [SerializeField]
     DraggableObject draggableObject;
+    [SerializeField]
+    GameObject pin;
     [SerializeField]
     Renderer objectRenderer;
 
@@ -21,6 +22,7 @@ public class BaseObject : MonoBehaviour
     public Project project;
 
     private bool _editable;
+
     [SerializeField]
     public bool Editable
     {
@@ -28,7 +30,6 @@ public class BaseObject : MonoBehaviour
         {
             return _editable;
         }
-
         set
         {
             _editable = value;
@@ -38,6 +39,7 @@ public class BaseObject : MonoBehaviour
     }
 
     private bool _active;
+
     [SerializeField]
     public bool Active
     {
@@ -51,6 +53,10 @@ public class BaseObject : MonoBehaviour
             if (draggableObject != null)
             {
                 draggableObject.enabled = value;
+            }
+            if (pin != null)
+            {
+                pin.SetActive(value);
             }
             if (collidingObject != null)
             {
@@ -67,18 +73,4 @@ public class BaseObject : MonoBehaviour
     }
 
     private bool clicking = false;
-
-    // Use this for initialization
-    void Start()
-    {
-        //draggableObject = GetComponent<DraggableObject>();
-        //collidingObject = GetComponent<CollidingObject>();
-        //onMapObject = GetComponent<OnMapObject>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
