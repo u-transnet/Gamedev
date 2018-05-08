@@ -1,4 +1,6 @@
-﻿namespace Mapbox.Examples
+﻿using Mapbox.Unity.Utilities;
+
+namespace Mapbox.Examples
 {
     using Mapbox.Unity.Map;
     using UnityEngine;

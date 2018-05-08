@@ -316,6 +316,7 @@ MonoBehaviour:
   onMapObject: {fileID: 114033448894919210}
   collidingObject: {fileID: 114589719844709728}
   draggableObject: {fileID: 114020038142788394}
+  pin: {fileID: 1903353588859486}
   objectRenderer: {fileID: 23839122875337744}
   alfa: 0.5
   canBeSelected: 1
