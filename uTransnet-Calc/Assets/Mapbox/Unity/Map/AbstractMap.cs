@@ -1,14 +1,15 @@
+using Mapbox.Utils;
+
 namespace Mapbox.Unity.Map
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using Mapbox.Unity.Utilities;
-	using Utils;
-	using UnityEngine;
 	using Mapbox.Map;
-	using Mapbox.Unity.MeshGeneration.Factories;
 	using Mapbox.Unity.MeshGeneration.Data;
+	using Mapbox.Unity.MeshGeneration.Factories;
+	using Mapbox.Unity.Utilities;
+	using UnityEngine;
 
 	public interface IUnifiedMap
 	{
@@ -460,7 +461,7 @@ namespace Mapbox.Unity.Map
 		public virtual void UpdateMap(Vector2d latLon, float zoom)
 		{
 			float differenceInZoom = 0.0f;
-			if (Math.Abs(Zoom - zoom) > Constants.EpsilonFloatingPoint)
+			if (Math.Abs(Zoom - zoom) > Mapbox.Utils.Constants.EpsilonFloatingPoint)
 			{
 				SetZoom(zoom);
 				differenceInZoom = Zoom - InitialZoom;
@@ -480,7 +481,7 @@ namespace Mapbox.Unity.Map
 			Options.placementOptions.placementStrategy.SetUpPlacement(this);
 
 			//Scale the map accordingly.
-			if (Math.Abs(differenceInZoom) > Constants.EpsilonFloatingPoint)
+			if (Math.Abs(differenceInZoom) > Mapbox.Utils.Constants.EpsilonFloatingPoint)
 			{
 				_mapScaleFactor = Vector3.one * Mathf.Pow(2, differenceInZoom);
 				_mapScaleFactor.y = 1;

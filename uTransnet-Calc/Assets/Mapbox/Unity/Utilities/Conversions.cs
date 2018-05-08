@@ -280,8 +280,8 @@ namespace Mapbox.Unity.Utilities
 			double centerX = x + 0.5;
 			double centerY = y + 0.5;
 
-			centerX = ((centerX / tileCnt * 2) - 1) * Constants.WebMercMax;
-			centerY = (1 - (centerY / tileCnt * 2)) * Constants.WebMercMax;
+			centerX = ((centerX / tileCnt * 2) - 1) * Utils.Constants.WebMercMax;
+			centerY = (1 - (centerY / tileCnt * 2)) * Utils.Constants.WebMercMax;
 			return new Vector2d(centerX, centerY);
 		}
 

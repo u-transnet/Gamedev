@@ -1,13 +1,13 @@
 namespace Mapbox.Unity.MeshGeneration.Data
 {
-	using UnityEngine;
+	using System;
+	using System.Collections.Generic;
+	using Mapbox.Map;
+	using Mapbox.Unity.Map;
 	using Mapbox.Unity.MeshGeneration.Enums;
 	using Mapbox.Unity.Utilities;
-	using Utils;
-	using Mapbox.Map;
-	using System;
-	using Mapbox.Unity.Map;
-	using System.Collections.Generic;
+	using UnityEngine;
+    using Mapbox.Utils;
 
 	public class UnityTile : MonoBehaviour
 	{
