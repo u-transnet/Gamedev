@@ -4,17 +4,19 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using UnityEngine;
+
 namespace Mapbox.Map
 {
-	using System;
-	using Mapbox.Platform;
-	using System.Linq;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using Mapbox.Unity.Utilities;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using Mapbox.Platform;
+    using Mapbox.Unity.Utilities;
 
 
-	/// <summary>
+    /// <summary>
 	///    A Map tile, a square with vector or raster data representing a geographic
 	///    bounding box. More info <see href="https://en.wikipedia.org/wiki/Tiled_web_map">
 	///    here </see>.
@@ -209,7 +211,6 @@ namespace Mapbox.Map
 		List<string> ids = new List<string>();
 		private void HandleTileResponse(Response response)
 		{
-
 			if (response.HasError)
 			{
 				if (!ids.Contains(_id.ToString()))

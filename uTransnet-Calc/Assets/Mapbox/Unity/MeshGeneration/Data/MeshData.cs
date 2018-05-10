@@ -3,7 +3,7 @@ namespace Mapbox.Unity.MeshGeneration.Data
 	using System;
 	using System.Collections.Generic;
 	using UnityEngine;
-	using Utils;
+	using Mapbox.Utils;
 
 	// TODO: Do we need this class? Why not just use `Mesh`?
 	public class MeshData

@@ -1,44 +1,59 @@
 ﻿namespace Mapbox.Examples
 {
-	using Mapbox.Unity.Location;
-	using Mapbox.Unity.Map;
-	using UnityEngine;
+    using Mapbox.Unity.Location;
+    using UnityEngine;
 
-	public class ImmediatePositionWithLocationProvider : MonoBehaviour
-	{
-		//[SerializeField]
-		//private UnifiedMap _map;
+    public class ImmediatePositionWithLocationProvider : MonoBehaviour
+    {
+        //[SerializeField]
+        //private UnifiedMap _map;
 
-		bool _isInitialized;
+        bool _isInitialized;
 
-		ILocationProvider _locationProvider;
-		ILocationProvider LocationProvider
-		{
-			get
-			{
-				if (_locationProvider == null)
-				{
-					_locationProvider = LocationProviderFactory.Instance.DefaultLocationProvider;
-				}
+        bool _updated = false;
 
-				return _locationProvider;
-			}
-		}
+        ILocationProvider _locationProvider;
 
-		Vector3 _targetPosition;
+        ILocationProvider LocationProvider
+        {
+            get
+            {
+                if (_locationProvider == null)
+                {
+                    _locationProvider = LocationProviderFactory.Instance.DefaultLocationProvider;
+                }
 
-		void Start()
-		{
-			LocationProviderFactory.Instance.mapManager.OnInitialized += () => _isInitialized = true;
-		}
+                return _locationProvider;
+            }
+        }
 
-		void LateUpdate()
-		{
-			if (_isInitialized)
-			{
-				var map = LocationProviderFactory.Instance.mapManager;
-				transform.localPosition = map.GeoToWorldPosition(LocationProvider.CurrentLocation.LatitudeLongitude);
-			}
-		}
-	}
+        Vector3 _targetPosition;
+
+        void Start()
+        {
+            LocationProviderFactory.Instance.mapManager.OnInitialized += () => _isInitialized = true;
+//            LocationProviderFactory.Instance.mapManager.OnInitialized += UpdateLocation;
+            UpdateLocation();
+        }
+
+        void UpdateLocation()
+        {
+            Debug.Log("Try update");
+//            if (_isInitialized)
+            {
+                Debug.Log("update");
+                var map = LocationProviderFactory.Instance.mapManager;
+                LocationProvider.OnLocationUpdated += location =>
+                {
+                    if (!_updated)
+                    {
+                        map.Initialize(location.LatitudeLongitude, map.AbsoluteZoom);
+                        Debug.Log("loc: " + location);
+                        _updated = true;
+                    }
+                };
+                Debug.Log("update!!!");
+            }
+        }
+    }
 }

@@ -1,11 +1,11 @@
 namespace Mapbox.Unity.MeshGeneration.Factories
 {
-	using Mapbox.Platform;
-	using Mapbox.Unity.MeshGeneration.Data;
 	using System;
-	using UnityEngine;
-	using Mapbox.Unity.Map;
 	using Mapbox.Map;
+	using Mapbox.Platform;
+	using Mapbox.Unity.Map;
+	using Mapbox.Unity.MeshGeneration.Data;
+	using UnityEngine;
 
 	/// <summary>
 	/// Factories

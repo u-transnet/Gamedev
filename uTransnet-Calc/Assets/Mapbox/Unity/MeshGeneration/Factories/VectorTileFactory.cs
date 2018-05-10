@@ -193,10 +193,12 @@
 
 			// TODO: move unitytile state registrations to layer visualizers. Not everyone is interested in this data
 			// and we should not wait for it here!
-			foreach (var layerName in _cachedData[tile].Data.LayerNames())
+            int processedLayerCount = 0;
+			foreach (string layerName in _cachedData[tile].Data.LayerNames())
 			{
 				if (_layerBuilder.ContainsKey(layerName))
 				{
+                    processedLayerCount++;
 					foreach (var builder in _layerBuilder[layerName])
 					{
 						if (builder.Active)
@@ -207,6 +209,10 @@
 					}
 				}
 			}
+            if(processedLayerCount == 0) {
+                Progress++;
+                Progress--;
+            }
 
 			tile.VectorDataState = TilePropertyState.Loaded;
 			_cachedData.Remove(tile);
