@@ -182,6 +182,7 @@ namespace Mapbox.Examples
         {
             activeLink = Instantiate(_linkPrefab);
             activeLink.transform.parent = activePoint.transform;
+            activeLink.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             var strechy = activeLink.GetComponent<StretchyTethered>();
             strechy.targetObj[0] = PrevPoint.transform;
             strechy.targetObj[1] = activePoint.transform;
