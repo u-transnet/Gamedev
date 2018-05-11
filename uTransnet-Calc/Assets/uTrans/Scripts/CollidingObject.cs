@@ -1,24 +1,31 @@
 ﻿using UnityEngine;
-using System.Collections;
-using Mapbox.Utils;
-using Mapbox.Unity.Map;
 
 public class CollidingObject : MonoBehaviour
 {
     public Collider NodeCollider { get; private set; }
+
     public Renderer NodeRenderer { get; private set; }
 
     public string[] usedTags;
     public string[] ignoredTags;
 
     [SerializeField]
-    public bool colliding = false;
+    public bool Colliding
+    {
+        get
+        {
+            return collisions > 0;
+        }
+    }
+
+
+    private int collisions;
 
     private OnMapObject uObject;
 
     [SerializeField]
     Color defaultColor;
-   
+
 
     // Use this for initialization
     void Start()
@@ -32,7 +39,7 @@ public class CollidingObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (colliding)
+        if (Colliding)
         {
             NodeRenderer.material.color = new Color(0.8f, 0, 0, 0.5f);
         }
@@ -52,21 +59,40 @@ public class CollidingObject : MonoBehaviour
     {
         if (Check(collision.gameObject.tag))
         {
-            colliding = true;
+            collisions++;
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    /*private void OnCollisionStay(Collision collision)
     {
         if (Check(collision.gameObject.tag))
         {
-            colliding = true;
+            Collisions++;
         }
-    }
+    }*/
 
     void OnCollisionExit(Collision collision)
     {
-        colliding = false;
+        if (Check(collision.gameObject.tag))
+        {
+            collisions--;
+        }
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (Check(collider.gameObject.tag))
+        {
+            collisions++;
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (Check(collider.gameObject.tag))
+        {
+            collisions--;
+        }
     }
 
     bool Check(string needle)

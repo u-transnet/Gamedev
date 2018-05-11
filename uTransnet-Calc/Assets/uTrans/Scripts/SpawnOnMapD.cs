@@ -88,8 +88,8 @@ namespace Mapbox.Examples
                     //Debug.Log("Radius: " + radius + "   Distance: " + distance);
                     if (distance <= radius)
                     {
-                        bool collidingLink = (activeLink != null) ? activeLink.GetComponentInChildren<CollidingObject>().colliding : false;
-                        yesButton.interactable = !activePoint.GetComponent<CollidingObject>().colliding && !collidingLink;
+                        bool collidingLink = (activeLink != null) ? activeLink.GetComponentInChildren<CollidingObject>().Colliding : false;
+                        yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding && !collidingLink;
                     }
                     else
                     {
@@ -98,7 +98,7 @@ namespace Mapbox.Examples
                 }
                 else
                 {
-                    yesButton.interactable = !activePoint.GetComponent<CollidingObject>().colliding;
+                    yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding;
                 }
             }
             else
@@ -188,6 +188,13 @@ namespace Mapbox.Examples
             strechy.targetObj[1] = activePoint.transform;
 
             return activeLink;
+        }
+
+        public void CenterMap() {
+            if(projectsEditor.ActiveProject != null){
+                var centerCoordinates = projectsEditor.ActiveProject.GetCenterCoordinates();
+                _map.SetCenterLatitudeLongitude(centerCoordinates);
+            }
         }
 
         public void OnLongPress(GameObject go)

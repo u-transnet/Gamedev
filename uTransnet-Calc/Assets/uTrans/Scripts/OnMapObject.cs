@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Mapbox.Unity.Map;
 using Mapbox.Utils;
-using Mapbox.Unity.Map;
+using UnityEngine;
 
 public class OnMapObject : MonoBehaviour
 {
@@ -11,13 +10,20 @@ public class OnMapObject : MonoBehaviour
 
     public AbstractMap Map { get; set; }
 
-    private Vector2d location;
-    
+    private Vector2d _location;
+    public Vector2d Location
+    {
+        get
+        {
+            return _location;
+        }
+    }
+
 
     public void NewPos(Vector3 pos)
     {
-        location = Map.WorldToGeoPosition(pos);
-        transform.localPosition = Map.GeoToWorldPosition(location, true);
+        _location = Map.WorldToGeoPosition(pos);
+        transform.localPosition = Map.GeoToWorldPosition(_location, true);
         var curScale = spawnScale * Map.transform.localScale.x;
         transform.localScale = new Vector3(curScale, curScale, curScale);
     }
@@ -25,7 +31,7 @@ public class OnMapObject : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        transform.localPosition = Map.GeoToWorldPosition(location, true);
+        transform.localPosition = Map.GeoToWorldPosition(_location, true);
         var curScale = spawnScale * Map.transform.localScale.x;
         transform.localScale = new Vector3(curScale, curScale, curScale);
     }

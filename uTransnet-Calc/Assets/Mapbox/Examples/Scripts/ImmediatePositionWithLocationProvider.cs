@@ -38,10 +38,8 @@
 
         void UpdateLocation()
         {
-            Debug.Log("Try update");
 //            if (_isInitialized)
             {
-                Debug.Log("update");
                 var map = LocationProviderFactory.Instance.mapManager;
                 LocationProvider.OnLocationUpdated += location =>
                 {
@@ -52,7 +50,6 @@
                         _updated = true;
                     }
                 };
-                Debug.Log("update!!!");
             }
         }
     }
