@@ -1,6 +1,6 @@
-﻿using Mapbox.Unity.Utilities;
+﻿using uTrans.Components;
 
-namespace Mapbox.Examples
+namespace uTrans
 {
     using Mapbox.Unity.Map;
     using UnityEngine;
@@ -50,17 +50,48 @@ namespace Mapbox.Examples
                 if (_prevPoint != null)
                 {
                     _prevPoint.transform.GetChild(0).gameObject.SetActive(true);
-                    doneButton.interactable = true;
-                }
-                else
-                {
-                    doneButton.interactable = false;
                 }
             }
         }
 
-        private GameObject activePoint = null;
-        private GameObject activeLink = null;
+        private GameObject _activePoint = null;
+        public GameObject ActivePoint
+        {
+            get
+            {
+                return _activePoint;
+            }
+            set
+            {
+                _activePoint = value;
+                if(projectsEditor.ActiveProject != null)
+                {
+                    projectsEditor.ActiveProject.ActivePoint =
+                    (_activePoint != null) ? _activePoint.GetComponent<BaseObject>() : null;
+                }
+            }
+        }
+        private GameObject _activeLink;
+
+        private GameObject ActiveLink
+        {
+            get
+            {
+                return _activeLink;
+            }
+            set
+            {
+                if (_activeLink != null)
+                {
+                    _activeLink.GetComponent<BaseObject>().Active = false;
+                }
+                _activeLink = value;
+                if (_activeLink != null)
+                {
+                    _activeLink.GetComponent<BaseObject>().Active = true;
+                }
+            }
+        }
 
         public bool PointerUsed { get; set; }
 
@@ -79,17 +110,17 @@ namespace Mapbox.Examples
         private void Update()
         {
 
-            if (activePoint != null)
+            if (ActivePoint != null)
             {
                 if (PrevPoint != null)
                 {
                     float radius = PrevPoint.GetComponentInChildren<AreaRenderer>().GetDistance();
-                    float distance = Vector3.Distance(PrevPoint.transform.position, activePoint.transform.position);
+                    float distance = Vector3.Distance(PrevPoint.transform.position, ActivePoint.transform.position);
                     //Debug.Log("Radius: " + radius + "   Distance: " + distance);
                     if (distance <= radius)
                     {
-                        bool collidingLink = (activeLink != null) ? activeLink.GetComponentInChildren<CollidingObject>().Colliding : false;
-                        yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding && !collidingLink;
+                        bool collidingLink = (ActiveLink != null) ? ActiveLink.GetComponentInChildren<CollidingObject>().Colliding : false;
+                        yesButton.interactable = !ActivePoint.GetComponent<CollidingObject>().Colliding && !collidingLink;
                     }
                     else
                     {
@@ -98,100 +129,122 @@ namespace Mapbox.Examples
                 }
                 else
                 {
-                    yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding;
+                    yesButton.interactable = !ActivePoint.GetComponent<CollidingObject>().Colliding;
                 }
+
+                noButton.interactable = true;
+                pointButton.interactable = false;
+                doneButton.interactable = false;
             }
             else
             {
+                doneButton.interactable = projectsEditor.ActiveProject != null;
+                pointButton.interactable = true;
                 yesButton.interactable = false;
+                noButton.interactable = false;
             }
 
             //Debug.Log(Input.mousePosition);
         }
 
-        private GameObject Spawn(Vector3 pos)
-        {
-            activePoint = Instantiate(_markerPrefab);
-            var node = activePoint.GetComponent<OnMapObject>();
-            node.Map = _map;
-            node.NewPos(pos);
-            node.GetComponent<DraggableObject>().BuildingManager = this;
-            return activePoint;
-        }
-
-        public void SpawnOnCenter()
+        public GameObject Spawn(Vector3 pos, int id = -1)
         {
             if (projectsEditor.ActiveProject == null)
             {
                 projectsEditor.NewProject();
             }
-            pointButton.interactable = false;
-            noButton.interactable = true;
-            var mousePos = Input.mousePosition;
+
+            ActivePoint = Instantiate(_markerPrefab);
+            var node = ActivePoint.GetComponent<OnMapObject>();
+            node.Map = _map;
+            node.NewPos(pos);
+            node.GetComponent<DraggableObject>().BuildingManager = this;
+            projectsEditor.ActiveProject.AddPoint(ActivePoint, id);
+            return ActivePoint;
+        }
+
+        public void SpawnOnCenter()
+        {
 
             Camera cam = Camera.main;
             float height = 2f * cam.orthographicSize;
             float width = height * cam.aspect;
 
             var objectPos = cam.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            projectsEditor.ActiveProject.AddPoint(Spawn(objectPos));
-            if (activePoint != null && PrevPoint != null)
+            Spawn(objectPos);
+            if (ActivePoint != null && PrevPoint != null)
             {
-                projectsEditor.ActiveProject.AddLink(CreateLink());
+                CreateLink();
             }
         }
 
         public void ConfirmPoint()
         {
-            pointButton.interactable = true;
-            noButton.interactable = false;
+            ActivePoint.GetComponent<BaseObject>().Active = false;
 
-            activePoint.GetComponent<BaseObject>().Active = false;
+            PrevPoint = ActivePoint;
 
-            PrevPoint = activePoint;
-
-            if (activeLink != null)
+            if (ActiveLink != null)
             {
-                activeLink.GetComponent<BaseObject>().Active = false;
-                activeLink = null;
+                ActiveLink.GetComponent<BaseObject>().Active = false;
+                ActiveLink = null;
             }
-            activePoint = null;
+            ActivePoint = null;
 
         }
 
         public void RemoveActivePoint()
         {
-            projectsEditor.ActiveProject.RemovePoint(activePoint);
-            activePoint = null;
-            activeLink = null;
-            pointButton.interactable = true;
-            noButton.interactable = false;
+            var points = projectsEditor.ActiveProject.RemovePoint(ActivePoint);
+            if (points.Count == 2)
+            {
+                CreateLink(points[0], points[1]);
+                ActivePoint = points[0];
+            }
+            else
+            {
+                ActivePoint = null;
+            }
+            ActiveLink = null;
         }
 
         public void FinishLine()
         {
             PrevPoint = null;
-            if (activePoint != null)
+            if (ActivePoint != null)
             {
                 RemoveActivePoint();
             }
             projectsEditor.FinishProject();
         }
 
-        private GameObject CreateLink()
+        private void CreateLink()
         {
-            activeLink = Instantiate(_linkPrefab);
-            activeLink.transform.parent = activePoint.transform;
-            activeLink.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            var strechy = activeLink.GetComponent<StretchyTethered>();
-            strechy.targetObj[0] = PrevPoint.transform;
-            strechy.targetObj[1] = activePoint.transform;
-
-            return activeLink;
+            CreateLink(ActivePoint, PrevPoint);
         }
 
-        public void CenterMap() {
-            if(projectsEditor.ActiveProject != null){
+        private void CreateLink(GameObject g1, GameObject g2)
+        {
+            ActiveLink = SpawnLink(g1, g2);
+            projectsEditor.ActiveProject.AddLink(ActiveLink);
+        }
+
+        public GameObject SpawnLink(GameObject g1, GameObject g2)
+        {
+            var link = Instantiate(_linkPrefab);
+            link.transform.parent = g1.transform;
+            link.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            var strechy = link.GetComponent<StretchyTethered>();
+            strechy.targetObj[0] = g2.transform;
+            strechy.targetObj[1] = g1.transform;
+
+            return link;
+        }
+
+        public void CenterMap()
+        {
+            if (projectsEditor.ActiveProject != null)
+            {
                 var centerCoordinates = projectsEditor.ActiveProject.GetCenterCoordinates();
                 _map.SetCenterLatitudeLongitude(centerCoordinates);
             }
@@ -203,7 +256,7 @@ namespace Mapbox.Examples
             if (projectsEditor.ActiveProject == null)
             {
                 projectsEditor.FindActiveProject(go);
-                doneButton.interactable = true;
+//                doneButton.interactable = true;
             }
         }
 
@@ -214,11 +267,9 @@ namespace Mapbox.Examples
             {
                 if (projectsEditor.ActiveProject.Contains(go))
                 {
-                    projectsEditor.ActiveProject.ActivePoint = go.GetComponent<BaseObject>();
-
-                    pointButton.interactable = false;
-                    doneButton.interactable = false;
-                    activePoint = go;
+//                    pointButton.interactable = false;
+//                    doneButton.interactable = false;
+                    ActivePoint = go;
                 }
             }
         }

@@ -800,7 +800,8 @@ namespace SQLite4Unity3d
 		public T Get<T>(object pk) where T : new()
 		{
 			var map = GetMapping(typeof(T));
-			return Query<T>(map.GetByPrimaryKeySql, pk).First();
+			var t = Query<T>(map.GetByPrimaryKeySql, pk);
+			return t.First();
 		}
 
 		/// <summary>

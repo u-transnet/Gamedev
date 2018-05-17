@@ -1,69 +1,80 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using uTrans.Services;
 
-public class ProjectsEditor
+namespace uTrans
 {
-    List<Project> projects = new List<Project>();
+    public class ProjectsEditor
+    {
+        List<Project> projects = new List<Project>();
 
-    private Project _activeProject;
-    public Project ActiveProject {
-        get
+        private Project _activeProject;
+
+        public Project ActiveProject
         {
-            return _activeProject;
+            get
+            {
+                return _activeProject;
+            }
+            set
+            {
+                if (_activeProject != null)
+                {
+                    _activeProject.Active = false;
+                }
+                _activeProject = value;
+                if (_activeProject != null)
+                {
+                    _activeProject.Active = true;
+                }
+            }
         }
 
-        set
+        public Project NewProject(int id = -1)
         {
-            if (_activeProject != null)
-            {
-                _activeProject.Active = false;
+            var project = ScriptableObject.CreateInstance<Project>();
+            if(id < 0){
+                Debug.Log("newProject");
+                project.ProjectDTO = DataService.instance.ProjectDAO.New();
+            } else {
+                Debug.Log("Loading project " + id);
+                project.ProjectDTO = DataService.instance.ProjectDAO.GetById(id);
             }
-            _activeProject = value;
-            if (_activeProject != null)
-            {
-                _activeProject.Active = true;
-            }
+            ActiveProject = project;
+            projects.Add(ActiveProject);
+
+            return ActiveProject;
         }
-    }
 
-    public Project NewProject()
-    {
-        Debug.Log("newProject");
-        ActiveProject = ScriptableObject.CreateInstance<Project>();
-        projects.Add(ActiveProject);
-
-        return ActiveProject;
-    }
-
-    public void FinishProject()
-    {
-        ActiveProject = null;
-    }
-
-    public void DeleteProject()
-    {
-        if (ActiveProject != null)
+        public void FinishProject()
         {
-            ActiveProject.Delete();
             ActiveProject = null;
         }
-    }
 
-    public Project FindActiveProject(GameObject go)
-    {
-        Project _activeProject = null;
-        foreach (Project proj in projects)
+        public void DeleteProject()
         {
-            if (proj.Contains(go))
+            if (ActiveProject != null)
             {
-                _activeProject = proj;
-                break;
+                ActiveProject.Delete();
+                ActiveProject = null;
             }
         }
 
-        ActiveProject = (_activeProject != null) ? _activeProject : ActiveProject;
+        public Project FindActiveProject(GameObject go)
+        {
+            Project _activeProject = null;
+            foreach (Project proj in projects)
+            {
+                if (proj.Contains(go))
+                {
+                    _activeProject = proj;
+                    break;
+                }
+            }
 
-        return _activeProject;
+            ActiveProject = (_activeProject != null) ? _activeProject : ActiveProject;
+
+            return _activeProject;
+        }
     }
 }

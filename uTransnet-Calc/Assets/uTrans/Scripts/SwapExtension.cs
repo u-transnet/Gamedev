@@ -3,7 +3,6 @@
  *
  * Swap an array element with the element after it
  */
-using UnityEngine;
 
 public static class SwapExtension {
 

@@ -1,11 +1,13 @@
-﻿namespace Mapbox.Examples
+﻿using uTrans;
+
+namespace Mapbox.Examples
 {
+	using System;
 	using Mapbox.Unity.Map;
 	using Mapbox.Unity.Utilities;
 	using Mapbox.Utils;
 	using UnityEngine;
 	using UnityEngine.EventSystems;
-	using System;
 
 	public class QuadTreeCameraMovement : MonoBehaviour
 	{

@@ -28,6 +28,7 @@ GameObject:
   - component: {fileID: 114020038142788394}
   - component: {fileID: 114899025893218794}
   - component: {fileID: 114777003071140146}
+  - component: {fileID: 114637247191316690}
   m_Layer: 0
   m_Name: Node
   m_TagString: structure
@@ -300,8 +301,19 @@ MonoBehaviour:
   - building
   - structure
   ignoredTags: []
-  colliding: 0
   defaultColor: {r: 0.3803922, g: 0.3803922, b: 0.3803922, a: 0}
+--- !u!114 &114637247191316690
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1773874648088076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698f5f5c760e96b4691943f643fc7002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _value: -1
 --- !u!114 &114777003071140146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,6 +330,7 @@ MonoBehaviour:
   draggableObject: {fileID: 114020038142788394}
   pin: {fileID: 1903353588859486}
   objectRenderer: {fileID: 23839122875337744}
+  pointProps: {fileID: 0}
   alfa: 0.5
   canBeSelected: 1
   project: {fileID: 0}
@@ -364,7 +377,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1773874648088076}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
