@@ -1,23 +1,21 @@
-﻿namespace uTrans.Components
+﻿using UnityEngine.UI;
+
+namespace uTrans.Components
 {
     using UnityEngine;
 
     public class BaseObject : MonoBehaviour
     {
         [SerializeField]
-        OnMapObject onMapObject;
+        public CollidingObject collidingObject;
         [SerializeField]
-        CollidingObject collidingObject;
+        public Renderer objectRenderer;
         [SerializeField]
-        DraggableObject draggableObject;
+        public Id id;
         [SerializeField]
-        GameObject pin;
-        [SerializeField]
-        Renderer objectRenderer;
-        [SerializeField]
-        PointProps pointProps;
+        public Text debugText;
 
-        [ SerializeField]
+        [SerializeField]
         float alfa = 0.5f;
 
         [SerializeField]
@@ -58,14 +56,6 @@
             set
             {
                 _active = value;
-                if (draggableObject != null)
-                {
-                    draggableObject.enabled = value;
-                }
-                if (pin != null)
-                {
-                    pin.SetActive(value);
-                }
                 if (collidingObject != null)
                 {
                     if (!value)
@@ -79,7 +69,5 @@
                 }
             }
         }
-
-        private bool clicking = false;
     }
 }

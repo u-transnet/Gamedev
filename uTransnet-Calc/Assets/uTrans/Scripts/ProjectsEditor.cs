@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using uTrans.Services;
 
@@ -10,6 +11,8 @@ namespace uTrans
 
         private Project _activeProject;
 
+        public event Action<Project, Project> OnProjectSwitch = (oldProject, newProject) => {};
+
         public Project ActiveProject
         {
             get
@@ -18,6 +21,7 @@ namespace uTrans
             }
             set
             {
+                var oldProject = _activeProject;
                 if (_activeProject != null)
                 {
                     _activeProject.Active = false;
@@ -27,6 +31,7 @@ namespace uTrans
                 {
                     _activeProject.Active = true;
                 }
+                OnProjectSwitch(oldProject, _activeProject);
             }
         }
 

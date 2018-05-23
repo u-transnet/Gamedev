@@ -8,6 +8,10 @@ TagManager:
   - structure
   - terrain
   - link
+  - grass
+  - wood
+  - water
+  - swamp
   layers:
   - Default
   - TransparentFX
@@ -17,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - TerrainType
   - 
   - 
   - 

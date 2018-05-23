@@ -34,7 +34,7 @@ namespace uTrans
                 _active = value;
                 foreach (GameObject point in points)
                 {
-                    point.GetComponent<BaseObject>().Editable = _active;
+                    point.GetComponent<BasePoint>().Editable = _active;
                     if (!_active) // Deselecting object
                     {
                         var componentId = point.GetComponent<Id>();
@@ -56,17 +56,17 @@ namespace uTrans
                 }
                 foreach (GameObject link in links)
                 {
-                    link.GetComponent<BaseObject>().Editable = _active;
+                    link.GetComponent<BaseLink>().Editable = _active;
                     if (!_active) // Deselecting object
                     {
                         var componentId = link.GetComponent<Id>();
-                        var stretchy = link.GetComponent<StretchyTethered>();
+                        var baseLink = link.GetComponent<BaseLink>();
                         if (componentId.Value < 0) // Not yet saved link
                         {
                             componentId.Value = DataService.instance.LinkDAO.New(
                                     ProjectDTO.Id,
-                                    stretchy.targetObj[0].GetComponent<Id>().Value,
-                                    stretchy.targetObj[1].GetComponent<Id>().Value
+                                    baseLink.FirstPoint.id.Value,
+                                    baseLink.SecondPoint.id.Value
                             ).Id;
                         }
                     }
@@ -74,12 +74,12 @@ namespace uTrans
             }
         }
 
-        private BaseObject _activePoint;
+        private BasePoint _activePoint;
 
         /// <summary>
         /// Currently selected point for movement
         /// </summary>
-        public BaseObject ActivePoint
+        public BasePoint ActivePoint
         {
             get
             {
@@ -158,7 +158,7 @@ namespace uTrans
         /// <param name="id">-1 for new point</param>
         public void AddPoint(GameObject point, int id)
         {
-            point.GetComponent<BaseObject>().project = this;
+            point.GetComponent<BasePoint>().project = this;
             points.Add(point);
             if (id < 0)
             {
@@ -172,7 +172,7 @@ namespace uTrans
 
         public void AddLink(GameObject link)
         {
-            SwitchAlfa(link.transform.GetChild(0).gameObject, _active ? 0.8f : 1);
+            SwitchAlfa<BaseLink>(link, _active ? 0.8f : 1);
             links.Add(link);
         }
 
@@ -208,9 +208,10 @@ namespace uTrans
             return points.Contains(go);
         }
 
-        private void SwitchAlfa(GameObject go, float alfa)
+        private void SwitchAlfa<T>(GameObject go, float alfa) where T : BaseObject
         {
-            var nodeRenderer = go.GetComponent<Renderer>();
+            var componentBaseObject = go.GetComponent<T>();
+            var nodeRenderer = componentBaseObject.objectRenderer;
             Color oldColor = nodeRenderer.material.color;
             nodeRenderer.material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alfa);
         }
@@ -227,14 +228,14 @@ namespace uTrans
             points.Remove(point);
             foreach (var link in FindLinks(point))
             {
-                var targetObjects = link.GetComponent<StretchyTethered>().targetObj;
-                if(targetObjects[0] == point.transform)
+                var baseLink = link.GetComponent<BaseLink>();
+                if(baseLink.FirstPoint.gameObject == point)
                 {
-                    neighbours.Add(targetObjects[1].gameObject);
+                    neighbours.Add(baseLink.FirstPoint.gameObject);
                 }
-                else if(targetObjects[1] == point.transform)
+                else if(baseLink.SecondPoint.gameObject == point)
                 {
-                    neighbours.Add(targetObjects[0].gameObject);
+                    neighbours.Add(baseLink.SecondPoint.gameObject);
                 }
                 RemoveLink(link);
             }
@@ -282,8 +283,8 @@ namespace uTrans
             var list = new List<GameObject>();
             foreach (GameObject link in links)
             {
-                var tmp = link.GetComponent<StretchyTethered>();
-                if (point.transform == tmp.targetObj[0] || point.transform == tmp.targetObj[1])
+                var tmp = link.GetComponent<BaseLink>();
+                if (point == tmp.FirstPoint.gameObject || point == tmp.SecondPoint.gameObject)
                 {
                     list.Add(link);
 
@@ -301,18 +302,21 @@ namespace uTrans
         public double GetTotalLength()
         {
             double length = 0;
-            var map = LocationProviderFactory.Instance.mapManager;
-            var cameraGeo = map.WorldToGeoPosition(Camera.main.transform.position);
-            var ruler = new CheapRuler(cameraGeo.y, CheapRulerUnits.Meters);
-
             foreach (var link in links)
             {
-                var tmp = link.GetComponent<StretchyTethered>();
-                var point1 = map.WorldToGeoPosition(tmp.targetObj[0].transform.position);
-                var point2 = map.WorldToGeoPosition(tmp.targetObj[1].transform.position);
-                length += ruler.Distance(point1.ToArray(), point2.ToArray());
+
+                length += link.GetComponent<BaseLink>().linkProps.Length;
             }
             return length;
+        }
+
+        /// <summary>
+        /// Count of points
+        /// </summary>
+        /// <returns></returns>
+        public int GetPointsCount()
+        {
+            return points.Count;
         }
     }
 }

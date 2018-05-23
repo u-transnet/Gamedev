@@ -1,4 +1,5 @@
-﻿using uTrans.Components;
+﻿using System;
+using uTrans.Components;
 
 namespace uTrans
 {
@@ -32,6 +33,9 @@ namespace uTrans
         [SerializeField]
         public Button doneButton;
 
+        [SerializeField]
+        public Text debugText;
+
         private GameObject _prevPoint;
 
         public GameObject PrevPoint
@@ -55,6 +59,7 @@ namespace uTrans
         }
 
         private GameObject _activePoint = null;
+
         public GameObject ActivePoint
         {
             get
@@ -63,14 +68,27 @@ namespace uTrans
             }
             set
             {
+                if (_activePoint != null)
+                {
+                    //                    _activePoint.GetComponent<OnMapObject>().OnLocationUpdate -= DrawPointDebug;
+                }
                 _activePoint = value;
-                if(projectsEditor.ActiveProject != null)
+                if (projectsEditor.ActiveProject != null)
                 {
                     projectsEditor.ActiveProject.ActivePoint =
-                    (_activePoint != null) ? _activePoint.GetComponent<BaseObject>() : null;
+                    (_activePoint != null) ? _activePoint.GetComponent<BasePoint>() : null;
+                }
+                if (_activePoint != null)
+                {
+                    //                    _activePoint.GetComponent<OnMapObject>().OnLocationUpdate += DrawPointDebug;
+                }
+                else
+                {
+                    debugText.text = "";
                 }
             }
         }
+
         private GameObject _activeLink;
 
         private GameObject ActiveLink
@@ -83,12 +101,12 @@ namespace uTrans
             {
                 if (_activeLink != null)
                 {
-                    _activeLink.GetComponent<BaseObject>().Active = false;
+                    _activeLink.GetComponent<BaseLink>().Active = false;
                 }
                 _activeLink = value;
                 if (_activeLink != null)
                 {
-                    _activeLink.GetComponent<BaseObject>().Active = true;
+                    _activeLink.GetComponent<BaseLink>().Active = true;
                 }
             }
         }
@@ -104,6 +122,10 @@ namespace uTrans
             noButton.GetComponent<Button>().onClick.AddListener(RemoveActivePoint);
             doneButton.GetComponent<Button>().onClick.AddListener(FinishLine);
 
+            projectsEditor.OnProjectSwitch += (oldProject, newProject) =>
+            {
+                DrawDebug(newProject);
+            };
             PointerUsed = false;
         }
 
@@ -180,13 +202,13 @@ namespace uTrans
 
         public void ConfirmPoint()
         {
-            ActivePoint.GetComponent<BaseObject>().Active = false;
+            ActivePoint.GetComponent<BasePoint>().Active = false;
 
             PrevPoint = ActivePoint;
 
             if (ActiveLink != null)
             {
-                ActiveLink.GetComponent<BaseObject>().Active = false;
+                ActiveLink.GetComponent<BaseLink>().Active = false;
                 ActiveLink = null;
             }
             ActivePoint = null;
@@ -234,9 +256,9 @@ namespace uTrans
             var link = Instantiate(_linkPrefab);
             link.transform.parent = g1.transform;
             link.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            var strechy = link.GetComponent<StretchyTethered>();
-            strechy.targetObj[0] = g2.transform;
-            strechy.targetObj[1] = g1.transform;
+            var strechy = link.GetComponent<BaseLink>().stretchy;
+            strechy.FirstTarget = g2.transform;
+            strechy.SecondTarget = g1.transform;
 
             return link;
         }
@@ -256,7 +278,7 @@ namespace uTrans
             if (projectsEditor.ActiveProject == null)
             {
                 projectsEditor.FindActiveProject(go);
-//                doneButton.interactable = true;
+                //                doneButton.interactable = true;
             }
         }
 
@@ -267,11 +289,28 @@ namespace uTrans
             {
                 if (projectsEditor.ActiveProject.Contains(go))
                 {
-//                    pointButton.interactable = false;
-//                    doneButton.interactable = false;
+                    //                    pointButton.interactable = false;
+                    //                    doneButton.interactable = false;
                     ActivePoint = go;
                 }
             }
+        }
+
+        private void DrawDebug(Project project)
+        {
+            if (project != null)
+            {
+                debugText.text = String.Format(
+                        "Length: {0:0}m\nPoints: {1}",
+                        project.GetTotalLength(),
+                        project.GetPointsCount()
+                );
+            }
+            else
+            {
+                debugText.text = "";
+            }
+
         }
     }
 }
