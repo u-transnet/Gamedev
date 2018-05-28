@@ -17,7 +17,7 @@ namespace uTrans.Components
 
 
         [SerializeField]
-        public bool Active
+        override public bool Active
         {
             get
             {

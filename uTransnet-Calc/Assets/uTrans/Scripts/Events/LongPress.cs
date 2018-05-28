@@ -34,7 +34,7 @@ public class LongPress : MonoBehaviour
         }
         else if(pressed)
         {
-            if (currentMouseDown != null && currentMouseDown == Input.mousePosition)
+            if (currentMouseDown == Input.mousePosition)
             {
                 if (timer > pressTime)
                 {

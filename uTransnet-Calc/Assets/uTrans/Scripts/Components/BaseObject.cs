@@ -47,7 +47,7 @@ namespace uTrans.Components
         private bool _active;
 
         [SerializeField]
-        public bool Active
+        virtual public bool Active
         {
             get
             {

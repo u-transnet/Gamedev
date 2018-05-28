@@ -1,8 +1,8 @@
-﻿using System;
-using uTrans.Components;
-
-namespace uTrans
+﻿namespace uTrans
 {
+    using System;
+    using uTrans.Components;
+    using uTrans.Network;
     using Mapbox.Unity.Map;
     using UnityEngine;
     using UnityEngine.UI;
@@ -127,6 +127,7 @@ namespace uTrans
                 DrawDebug(newProject);
             };
             PointerUsed = false;
+            ServerCommunication.SendName("Testing");
         }
 
         private void Update()
