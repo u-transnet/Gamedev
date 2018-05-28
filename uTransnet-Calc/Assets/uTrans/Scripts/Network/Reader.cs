@@ -1,9 +1,9 @@
-using System;
-using System.Net.Sockets;
-using UnityEngine;
-
 namespace uTrans.Network
 {
+    using System;
+    using System.Net.Sockets;
+    using UnityEngine;
+
     public class Reader
     {
         private int bytesNeeded;
@@ -25,11 +25,24 @@ namespace uTrans.Network
         public void BeginReading()
         {
             Debug.Log("Start reading");
-            networkStream.BeginRead(
+            IAsyncResult result = networkStream.BeginRead(
                     byteBuff, bytesRead, bytesNeeded - bytesRead,
                     new AsyncCallback(EndReading),
                     networkStream
             );
+
+        }
+
+        public void Read()
+        {
+            do
+            {
+                var chunk = new byte[bytesNeeded];
+                var chunkSize = networkStream.Read(chunk, bytesRead, bytesNeeded - bytesRead);
+                chunk.CopyTo(byteBuff, bytesRead);
+                bytesRead += chunkSize;
+            } while (bytesNeeded - bytesRead > 0);
+            callback(byteBuff);
         }
 
         public void EndReading(IAsyncResult ar)

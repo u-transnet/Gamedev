@@ -51,23 +51,24 @@ namespace uTrans.Network
         {
             try
             {
-                    // Get a stream object for reading
-                    NetworkStream stream = socketConnection.GetStream();
+                // Get a stream object for reading
+                NetworkStream stream = socketConnection.GetStream();
+                stream.ReadTimeout = 10000;
 
-                    Debug.Log("Receiving message");
-                    // Read length
-                    int length = NetworkUtils.DirectReadVarintInt32(stream);
-                    Debug.Log("Message length: " + length);
-                    Reader tmp = new Reader(
-                            stream,
-                            length,
-                            bytes =>
-                            {
-                                Envelope envelope = Envelope.Parser.ParseFrom(bytes);
-                                HandleMessage(envelope);
-                            }
-                    );
-                    tmp.BeginReading();
+                Debug.Log("Receiving message");
+                // Read length
+                int length = NetworkUtils.DirectReadVarintInt32(stream);
+                Debug.Log("Message length: " + length);
+                Reader reader = new Reader(
+                        stream,
+                        length,
+                        bytes =>
+                        {
+                            Envelope envelope = Envelope.Parser.ParseFrom(bytes);
+                            HandleMessage(envelope);
+                        }
+                );
+                reader.Read();
             }
             catch (SocketException socketException)
             {
@@ -105,7 +106,7 @@ namespace uTrans.Network
                 {
                     // Write length of message.
                     CodedOutputStream codedStream = new CodedOutputStream(stream, true);
-//                    int headerLength = CodedOutputStream.ComputeInt32Size(data.Length);
+                    //                    int headerLength = CodedOutputStream.ComputeInt32Size(data.Length);
                     codedStream.WriteInt32(data.Length);
                     codedStream.Flush();
                     // Write byte array to socketConnection stream.
@@ -131,14 +132,16 @@ namespace uTrans.Network
             codedStream.Flush();
             SendMessage(ms.ToArray());
 
-            if(onResponse != null)
+            if (onResponse != null)
             {
                 responseCallbacks.Enqueue(onResponse);
                 ListenForData();
             }
             else
             {
-                responseCallbacks.Enqueue(ignore => {});
+                responseCallbacks.Enqueue(ignore =>
+                {
+                });
             }
         }
 
