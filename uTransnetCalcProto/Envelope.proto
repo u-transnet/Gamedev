@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package utranscalc;
+
+option java_package = "com.github.utransnet.utranscalc";
+option csharp_namespace = "uTrans.Proto";
+
+message Envelope {
+    string name = 1;
+    int32 id = 2;
+}

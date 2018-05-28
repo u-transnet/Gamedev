@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.5'
+    }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'java'
+    id 'com.google.protobuf'  version "0.8.5"
+}
+
+group 'com.github.utransnet.utranscalc'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:1.0.1.RELEASE'
+    }
+}
+
+dependencies {
+    compile 'org.springframework:spring-core'
+    compile 'org.springframework:spring-context'
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.5.1'
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+protobuf {
+    protoc {
+        path = System.getenv('PROTOC_HOME') + "/bin/protoc"
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                csharp {
+                    //"uTransnetCalcServer/build/generated/source/proto/main/../../../../uTransnet-Calc/Assets/Proto"
+                    outputSubDir = "../../../../../../uTransnet-Calc/Assets/Proto"
+                }
+                python { }
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            // In addition to the default 'src/main/proto'
+            srcDir '../uTransnetCalcProto'
+        }
+        java {
+            srcDir 'build/generated/source/proto/main/java'
+        }
+    }
+}
