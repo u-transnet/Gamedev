@@ -1,4 +1,7 @@
 using UnityEngine;
+using uTrans.Calc;
+using uTrans.Data;
+using uTrans.Services;
 
 namespace uTrans.Components
 {
@@ -12,6 +15,34 @@ namespace uTrans.Components
         public PointProps pointProps;
         [SerializeField]
         public DraggableObject draggableObject;
+
+
+        [SerializeField]
+        public Material lightMaterial;
+        [SerializeField]
+        public Material heavyMaterial;
+
+        public PointType PointType
+        {
+            get
+            {
+                return pointProps.pointType;
+            }
+
+            set
+            {
+                pointProps.pointType = value;
+                switch (value)
+                {
+                    case uTrans.Calc.PointType.Heavy:
+                        objectRenderer.material = heavyMaterial;
+                    break;
+                    case uTrans.Calc.PointType.Light:
+                        objectRenderer.material = lightMaterial;
+                    break;
+                }
+            }
+        }
 
 
 

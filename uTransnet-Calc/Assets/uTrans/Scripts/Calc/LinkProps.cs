@@ -7,7 +7,9 @@ using uTrans.Components;
 
 public enum LinkType
 {
-    Default
+    Default,
+    Soft,
+    Rigid
 }
 
 public class LinkProps : MonoBehaviour

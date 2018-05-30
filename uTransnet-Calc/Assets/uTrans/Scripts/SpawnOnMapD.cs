@@ -1,11 +1,12 @@
-﻿namespace uTrans
+﻿using uTrans.Calc;
+
+namespace uTrans
 {
     using System;
-    using uTrans.Components;
-    using uTrans.Network;
     using Mapbox.Unity.Map;
     using UnityEngine;
     using UnityEngine.UI;
+    using uTrans.Components;
 
     public class SpawnOnMapD : MonoBehaviour
     {
@@ -20,18 +21,6 @@
 
         [SerializeField]
         Camera cam;
-
-        [SerializeField]
-        public Button pointButton;
-
-        [SerializeField]
-        public Button yesButton;
-
-        [SerializeField]
-        public Button noButton;
-
-        [SerializeField]
-        public Button doneButton;
 
         [SerializeField]
         public Text debugText;
@@ -68,36 +57,28 @@
             }
             set
             {
-                if (_activePoint != null)
-                {
-                    //                    _activePoint.GetComponent<OnMapObject>().OnLocationUpdate -= DrawPointDebug;
-                }
                 _activePoint = value;
-                if (projectsEditor.ActiveProject != null)
+                if (ProjectsEditor.ActiveProject != null)
                 {
-                    projectsEditor.ActiveProject.ActivePoint =
+                    ProjectsEditor.ActiveProject.ActivePoint =
                     (_activePoint != null) ? _activePoint.GetComponent<BasePoint>() : null;
                 }
-                if (_activePoint != null)
+                /*if (_activePoint == null)
                 {
-                    //                    _activePoint.GetComponent<OnMapObject>().OnLocationUpdate += DrawPointDebug;
-                }
-                else
-                {
-                    debugText.text = "";
-                }
+                    DrawDebug(null);
+                }*/
             }
         }
 
         private GameObject _activeLink;
 
-        private GameObject ActiveLink
+        public GameObject ActiveLink
         {
             get
             {
                 return _activeLink;
             }
-            set
+            private set
             {
                 if (_activeLink != null)
                 {
@@ -113,80 +94,53 @@
 
         public bool PointerUsed { get; set; }
 
-        public ProjectsEditor projectsEditor = new ProjectsEditor();
+        public ProjectsEditor _projectsEditor = new ProjectsEditor();
+
+        public ProjectsEditor ProjectsEditor
+        {
+            get
+            {
+                return _projectsEditor;
+            }
+        }
 
         void Start()
         {
-            pointButton.GetComponent<Button>().onClick.AddListener(SpawnOnCenter);
-            yesButton.GetComponent<Button>().onClick.AddListener(ConfirmPoint);
-            noButton.GetComponent<Button>().onClick.AddListener(RemoveActivePoint);
-            doneButton.GetComponent<Button>().onClick.AddListener(FinishLine);
 
-            projectsEditor.OnProjectSwitch += (oldProject, newProject) =>
+            ProjectsEditor.OnProjectSwitch += (oldProject, newProject) =>
             {
+                if(oldProject != null)
+                {
+                    oldProject.OnProjectChanged -= DrawDebug;
+                }
+
+                if(newProject != null)
+                {
+                    newProject.OnProjectChanged += DrawDebug;
+                }
                 DrawDebug(newProject);
             };
             PointerUsed = false;
-            ServerCommunication.SendName("Testing");
         }
 
-        private void Update()
+        public GameObject Spawn(PointType pointType, Vector3 pos, int id = -1)
         {
-
-            if (ActivePoint != null)
+            if (ProjectsEditor.ActiveProject == null)
             {
-                if (PrevPoint != null)
-                {
-                    float radius = PrevPoint.GetComponentInChildren<AreaRenderer>().GetDistance();
-                    float distance = Vector3.Distance(PrevPoint.transform.position, ActivePoint.transform.position);
-                    //Debug.Log("Radius: " + radius + "   Distance: " + distance);
-                    if (distance <= radius)
-                    {
-                        bool collidingLink = (ActiveLink != null) ? ActiveLink.GetComponentInChildren<CollidingObject>().Colliding : false;
-                        yesButton.interactable = !ActivePoint.GetComponent<CollidingObject>().Colliding && !collidingLink;
-                    }
-                    else
-                    {
-                        yesButton.interactable = false;
-                    }
-                }
-                else
-                {
-                    yesButton.interactable = !ActivePoint.GetComponent<CollidingObject>().Colliding;
-                }
-
-                noButton.interactable = true;
-                pointButton.interactable = false;
-                doneButton.interactable = false;
-            }
-            else
-            {
-                doneButton.interactable = projectsEditor.ActiveProject != null;
-                pointButton.interactable = true;
-                yesButton.interactable = false;
-                noButton.interactable = false;
-            }
-
-            //Debug.Log(Input.mousePosition);
-        }
-
-        public GameObject Spawn(Vector3 pos, int id = -1)
-        {
-            if (projectsEditor.ActiveProject == null)
-            {
-                projectsEditor.NewProject();
+                ProjectsEditor.NewProject();
             }
 
             ActivePoint = Instantiate(_markerPrefab);
-            var node = ActivePoint.GetComponent<OnMapObject>();
-            node.Map = _map;
-            node.NewPos(pos);
-            node.GetComponent<DraggableObject>().BuildingManager = this;
-            projectsEditor.ActiveProject.AddPoint(ActivePoint, id);
+            BasePoint basePoint = ActivePoint.GetComponent<BasePoint>();
+            basePoint.onMapObject.SetMap(_map);
+            basePoint.onMapObject.NewPos(pos);
+            basePoint.draggableObject.BuildingManager = this;
+            basePoint.PointType = pointType;
+            ProjectsEditor.ActiveProject.AddPoint(ActivePoint, id);
             return ActivePoint;
         }
 
-        public void SpawnOnCenter()
+        public void SpawnOnCenter(PointType pointType)
         {
 
             Camera cam = Camera.main;
@@ -194,7 +148,13 @@
             float width = height * cam.aspect;
 
             var objectPos = cam.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            Spawn(objectPos);
+            SpawnPointWithLink(pointType, objectPos);
+
+        }
+
+        public void SpawnPointWithLink(PointType pointType, Vector3 pos)
+        {
+            Spawn(pointType, pos);
             if (ActivePoint != null && PrevPoint != null)
             {
                 CreateLink();
@@ -218,7 +178,7 @@
 
         public void RemoveActivePoint()
         {
-            var points = projectsEditor.ActiveProject.RemovePoint(ActivePoint);
+            var points = ProjectsEditor.ActiveProject.RemovePoint(ActivePoint);
             if (points.Count == 2)
             {
                 CreateLink(points[0], points[1]);
@@ -238,7 +198,7 @@
             {
                 RemoveActivePoint();
             }
-            projectsEditor.FinishProject();
+            ProjectsEditor.FinishProject();
         }
 
         private void CreateLink()
@@ -249,7 +209,7 @@
         private void CreateLink(GameObject g1, GameObject g2)
         {
             ActiveLink = SpawnLink(g1, g2);
-            projectsEditor.ActiveProject.AddLink(ActiveLink);
+            ProjectsEditor.ActiveProject.AddLink(ActiveLink);
         }
 
         public GameObject SpawnLink(GameObject g1, GameObject g2)
@@ -266,33 +226,36 @@
 
         public void CenterMap()
         {
-            if (projectsEditor.ActiveProject != null)
+            if (ProjectsEditor.ActiveProject != null)
             {
-                var centerCoordinates = projectsEditor.ActiveProject.GetCenterCoordinates();
+                var centerCoordinates = ProjectsEditor.ActiveProject.GetCenterCoordinates();
                 _map.SetCenterLatitudeLongitude(centerCoordinates);
             }
         }
 
-        public void OnLongPress(GameObject go)
+        public void OnLongPress(GameObject go, Vector3 position)
         {
-            Debug.Log("Pressed " + go.name);
-            if (projectsEditor.ActiveProject == null)
+            if (go.GetComponent<BasePoint>() != null)
             {
-                projectsEditor.FindActiveProject(go);
-                //                doneButton.interactable = true;
+                Debug.Log("Pressed " + go.name);
+                if (ProjectsEditor.ActiveProject == null)
+                {
+                    ProjectsEditor.FindActiveProject(go);
+                }
             }
         }
 
-        public void OnClick(GameObject go)
+        public void OnClick(GameObject go, Vector3 position)
         {
-            Debug.Log("Clicked " + go.name);
-            if (projectsEditor.ActiveProject != null)
+            if (go.GetComponent<BasePoint>() != null)
             {
-                if (projectsEditor.ActiveProject.Contains(go))
+                Debug.Log("Clicked " + go.name);
+                if (ProjectsEditor.ActiveProject != null)
                 {
-                    //                    pointButton.interactable = false;
-                    //                    doneButton.interactable = false;
-                    ActivePoint = go;
+                    if (ProjectsEditor.ActiveProject.Contains(go))
+                    {
+                        ActivePoint = go;
+                    }
                 }
             }
         }

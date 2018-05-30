@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Mapbox.CheapRulerCs;
-using Mapbox.Unity.Location;
+﻿using System;
+using System.Collections.Generic;
 using Mapbox.Utils;
 using UnityEngine;
-
 using uTrans.Components;
 using uTrans.Data;
 using uTrans.Services;
@@ -15,6 +13,8 @@ namespace uTrans
     {
         List<GameObject> points = new List<GameObject>();
         List<GameObject> links = new List<GameObject>();
+
+        public Action<Project> OnProjectChanged = (project) => {};
 
         public ProjectDTO ProjectDTO { get; set; }
 
@@ -34,15 +34,19 @@ namespace uTrans
                 _active = value;
                 foreach (GameObject point in points)
                 {
-                    point.GetComponent<BasePoint>().Editable = _active;
+                    BasePoint basePoint = point.GetComponent<BasePoint>();
+                    basePoint.Editable = _active;
                     if (!_active) // Deselecting object
                     {
                         var componentId = point.GetComponent<Id>();
-                        var onMapObject = point.GetComponent<OnMapObject>();
+                        var onMapObject = basePoint.onMapObject;
                         if (componentId.Value < 0) // Not yet saved point
                         {
                             componentId.Value = DataService.instance.PointDAO.New(
-                                    ProjectDTO.Id, onMapObject.Location.x, onMapObject.Location.y
+                                    ProjectDTO.Id,
+                                    onMapObject.Location.x,
+                                    onMapObject.Location.y,
+                                    basePoint.pointProps.pointType
                             ).Id;
                         }
                         else
@@ -158,22 +162,19 @@ namespace uTrans
         /// <param name="id">-1 for new point</param>
         public void AddPoint(GameObject point, int id)
         {
-            point.GetComponent<BasePoint>().project = this;
+            BasePoint basePoint = point.GetComponent<BasePoint>();
+            basePoint.project = this;
             points.Add(point);
-            if (id < 0)
-            {
-                var onMapObject = point.GetComponent<OnMapObject>();
-                var pointDTO = DataService.instance.PointDAO.New(ProjectDTO.Id, onMapObject.Location.x, onMapObject.Location.y);
-                id = pointDTO.Id;
-            }
-            var componentId = point.GetComponent<Id>();
+            var componentId = basePoint.GetComponent<Id>();
             componentId.Value = id;
+            OnProjectChanged(this);
         }
 
         public void AddLink(GameObject link)
         {
-            SwitchAlfa<BaseLink>(link, _active ? 0.8f : 1);
+            link.GetComponent<BaseLink>().Active = true;
             links.Add(link);
+            OnProjectChanged(this);
         }
 
 
@@ -195,6 +196,7 @@ namespace uTrans
             links = new List<GameObject>();
             points = new List<GameObject>();
             DataService.instance.ProjectDAO.Delete(ProjectDTO);
+            OnProjectChanged(this);
         }
 
 
@@ -229,34 +231,36 @@ namespace uTrans
             foreach (var link in FindLinks(point))
             {
                 var baseLink = link.GetComponent<BaseLink>();
-                if(baseLink.FirstPoint.gameObject == point)
-                {
-                    neighbours.Add(baseLink.FirstPoint.gameObject);
-                }
-                else if(baseLink.SecondPoint.gameObject == point)
+                if (baseLink.FirstPoint.gameObject == point)
                 {
                     neighbours.Add(baseLink.SecondPoint.gameObject);
+                }
+                else if (baseLink.SecondPoint.gameObject == point)
+                {
+                    neighbours.Add(baseLink.FirstPoint.gameObject);
                 }
                 RemoveLink(link);
             }
             var id = point.GetComponent<Id>().Value;
-            if(id > 0)
+            if (id > 0)
             {
                 DataService.instance.PointDAO.Delete(id);
             }
             Destroy(point);
+            OnProjectChanged(this);
             return neighbours;
         }
 
         private void RemoveLink(GameObject link)
         {
             var id = link.GetComponent<Id>().Value;
-            if(id > 0)
+            if (id > 0)
             {
                 DataService.instance.LinkDAO.Delete(id);
             }
             links.Remove(link);
             Destroy(link);
+            OnProjectChanged(this);
         }
 
 

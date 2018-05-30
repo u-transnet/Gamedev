@@ -26,7 +26,7 @@ namespace uTrans.Components
         private bool _editable;
 
         [SerializeField]
-        public bool Editable
+        virtual public bool Editable
         {
             get
             {

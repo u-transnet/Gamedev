@@ -1,3 +1,4 @@
+using uTrans.Calc;
 using uTrans.Components;
 using uTrans.Services;
 
@@ -24,16 +25,16 @@ namespace uTrans
         {
             foreach (var project in DataService.instance.ProjectDAO.All())
             {
-                spawnOnMapD.projectsEditor.NewProject(project.Id);
+                spawnOnMapD.ProjectsEditor.NewProject(project.Id);
                 foreach (var point in DataService.instance.PointDAO.FindByProject(project))
                 {
                     var worldPosition = map.GeoToWorldPosition(new Vector2d(point.X, point.Y));
-                    spawnOnMapD.Spawn(worldPosition, point.Id);
+                    spawnOnMapD.Spawn((PointType) point.Type, worldPosition, point.Id);
                 }
 
                 foreach (var link in DataService.instance.LinkDAO.FindByProject(project))
                 {
-                    var activeProject = spawnOnMapD.projectsEditor.ActiveProject;
+                    var activeProject = spawnOnMapD.ProjectsEditor.ActiveProject;
                     var firstPoint = activeProject.FindPointById(link.FirstPointId);
                     var secondPoint = activeProject.FindPointById(link.SecondPointId);
                     var onMapLink = spawnOnMapD.SpawnLink(firstPoint, secondPoint);

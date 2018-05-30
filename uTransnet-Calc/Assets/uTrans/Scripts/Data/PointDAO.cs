@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using uTrans.Calc;
 
 namespace uTrans.Data
 {
@@ -16,12 +17,13 @@ namespace uTrans.Data
             return point;
         }
 
-        public PointDTO New(int projectId, double x, double y)
+        public PointDTO New(int projectId, double x, double y, PointType type)
         {
             var point = new PointDTO();
             point.ProjectId = projectId;
             point.X = x;
             point.Y = y;
+            point.Type = (int) type;
             base.Insert(point);
             return point;
         }

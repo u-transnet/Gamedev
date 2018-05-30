@@ -14,6 +14,13 @@ namespace uTrans.Components
         public float spawnScale = 10f;
 
         [SerializeField]
+        public bool fixedScale = false;
+
+        [SerializeField]
+        private float heightShift = 0;
+
+
+        [SerializeField]
         private float _altitude;
 
         public float Altitude
@@ -28,7 +35,8 @@ namespace uTrans.Components
             }
         }
 
-        public AbstractMap Map { get; set; }
+        [SerializeField]
+        private AbstractMap map;
 
         public event Action<Vector2d> OnLocationUpdate = vectorD =>
         {
@@ -64,30 +72,34 @@ namespace uTrans.Components
         {
             OnLocationUpdate += newLocation =>
             {
-                Altitude = Map.QueryElevationInMetersAt(newLocation);
+                Altitude = map.QueryElevationInMetersAt(newLocation);
             };
         }
 
         void OnWillRenderObject()
         {
+            // Trigger event
             Location = Location;
         }
 
 
         public void NewPos(Vector3 pos)
         {
-            Location = Map.WorldToGeoPosition(pos);
-            transform.localPosition = Map.GeoToWorldPosition(Location, true);
-            var curScale = spawnScale * Map.transform.localScale.x;
-            transform.localScale = new Vector3(curScale, curScale, curScale);
+            Location = map.WorldToGeoPosition(pos);
         }
 
-        // Update is called once per frame
-        protected virtual void Update()
+        void Update()
         {
-            transform.localPosition = Map.GeoToWorldPosition(Location, true);
-            var curScale = spawnScale * Map.transform.localScale.x;
-            transform.localScale = new Vector3(curScale, curScale, curScale);
+            transform.localPosition = map.GeoToWorldPosition(Location, true);
+            if(heightShift > 0)
+            {
+                transform.localPosition += new Vector3(0, heightShift, 0);
+            }
+            if(!fixedScale)
+            {
+                var curScale = spawnScale * map.transform.localScale.x;
+                transform.localScale = new Vector3(curScale, curScale, curScale);
+            }
         }
 
         void OnTriggerEnter(Collider collider)
@@ -104,6 +116,11 @@ namespace uTrans.Components
             {
                 _terrainTypes.Remove(collider.gameObject.tag);
             }
+        }
+
+        public void SetMap(AbstractMap map)
+        {
+            this.map = map;
         }
     }
 }

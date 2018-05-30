@@ -1,52 +1,61 @@
-using UnityEngine;
-using uTrans.Calc;
-using uTrans.Components;
-
-public enum PointType
+namespace uTrans.Calc
 {
-    Default
-}
+    using UnityEngine;
+    using uTrans.Components;
 
-public class PointProps : MonoBehaviour
-{
-
-    private BasePoint baseObject;
-
-    [SerializeField]
-    public PointType pointType;
-
-    public float Altitude
+    public enum PointType
     {
-        get
-        {
-            return baseObject.onMapObject.Altitude;
-        }
+        Default,
+        Light,
+        Heavy
+
     }
 
-    public TerrainType Terrain
+    public class PointProps : MonoBehaviour
     {
-        get
-        {
-            var types = baseObject.onMapObject.TerrainTypes;
-            if(types.Contains(TerrainType.water.Tag())){
-                return TerrainType.water;
-            }
-            else if(types.Contains(TerrainType.swamp.Tag())){
-                return TerrainType.swamp;
-            }
-            else if(types.Contains(TerrainType.wood.Tag())){
-                return TerrainType.wood;
-            }
-            else if(types.Contains(TerrainType.grass.Tag())){
-                return TerrainType.grass;
-            }
-            else
-            return TerrainType.normal;
-        }
-    }
 
-    void Awake()
-    {
-        baseObject = GetComponent<BasePoint>();
+        private BasePoint baseObject;
+
+        [SerializeField]
+        public PointType pointType;
+
+        public float Altitude
+        {
+            get
+            {
+                return baseObject.onMapObject.Altitude;
+            }
+        }
+
+        public TerrainType Terrain
+        {
+            get
+            {
+                var types = baseObject.onMapObject.TerrainTypes;
+                if (types.Contains(TerrainType.water.Tag()))
+                {
+                    return TerrainType.water;
+                }
+                else if (types.Contains(TerrainType.swamp.Tag()))
+                {
+                    return TerrainType.swamp;
+                }
+                else if (types.Contains(TerrainType.wood.Tag()))
+                {
+                    return TerrainType.wood;
+                }
+                else if (types.Contains(TerrainType.grass.Tag()))
+                {
+                    return TerrainType.grass;
+                }
+                else
+                    return TerrainType.normal;
+            }
+        }
+
+        void Awake()
+        {
+            baseObject = GetComponent<BasePoint>();
+        }
     }
 }

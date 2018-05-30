@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class LongPress : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class LongPress : MonoBehaviour
     public float pressTime = 1;
     float timer = 0;
     float touchTime;
+
+
+    [SerializeField]
+    private bool worldWide = false;
 
     private Vector3 currentMouseDown;
     private Vector2 currentTouchDown;
@@ -19,73 +24,117 @@ public class LongPress : MonoBehaviour
         eventManager = FindObjectOfType<LongPressEventManager>();
     }
 
-    // Update is called once per frame
+
     void OnMouseOver()
     {
-        // Increment the timer
-        if (Input.GetMouseButton(0))
+        if (!worldWide)
         {
-            if (!pressed)
-            {
-                currentMouseDown = Input.mousePosition;
-                pressed = true;
-            }
-            timer += Time.deltaTime;
+            CheckInput();
         }
-        else if(pressed)
+    }
+
+    void OnMouseEnter()
+    {
+        if (!worldWide)
         {
-            if (currentMouseDown == Input.mousePosition)
-            {
-                if (timer > pressTime)
-                {
-                    // this is a long press
-                    OnLongPress();
-                }
-                else if (timer > 0)
-                {
-                    OnClick();
-                }
-            }
-            timer = 0;
-            pressed = false;
+            eventManager.HoveredObjects++;
         }
+    }
 
-        if (Input.touches.Length > 0)
+    void OnMouseExit()
+    {
+        if (!worldWide)
         {
-            Touch touch = Input.touches[0];
+            eventManager.HoveredObjects--;
+        }
+    }
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                touchTime = Time.time;
-                currentTouchDown = touch.position;
-            }
+    void Update()
+    {
+        if (worldWide && !eventManager.OverObject)
+        {
+            CheckInput();
+        }
+    }
 
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+    void CheckInput()
+    {
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+
+            // Increment the timer
+            if (Input.GetMouseButton(0))
             {
-                if (Vector2.Distance(currentTouchDown, touch.position) <= 10)
+                if (!pressed)
                 {
-                    if (Time.time - touchTime <= pressTime)
+                    currentMouseDown = Input.mousePosition;
+                    pressed = true;
+                }
+                timer += Time.deltaTime;
+            }
+            else if (pressed)
+            {
+                if (currentMouseDown == Input.mousePosition)
+                {
+                    if (timer > pressTime)
                     {
-                        //do stuff as a tap​
-                        OnClick();
+                        // Don't know why coords changed
+                        OnLongPress(Input.mousePosition);
                     }
-                    else
+                    else if (timer > 0)
                     {
-                        // this is a long press
-                        OnLongPress();
+                        OnClick(Input.mousePosition);
+                    }
+                }
+                timer = 0;
+                pressed = false;
+            }
+
+            if (Input.touches.Length > 0)
+            {
+                Touch touch = Input.touches[0];
+
+                if (touch.phase == TouchPhase.Began)
+                {
+                    touchTime = Time.time;
+                    currentTouchDown = touch.position;
+                }
+
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    if (Vector2.Distance(currentTouchDown, touch.position) <= 10)
+                    {
+                        if (Time.time - touchTime <= pressTime)
+                        {
+                            //do stuff as a tap​
+                            OnClick(new Vector3(touch.position.x, 0, touch.position.y));
+                        }
+                        else
+                        {
+                            // this is a long press
+                            OnLongPress(new Vector3(touch.position.x, 0, touch.position.y));
+                        }
                     }
                 }
             }
         }
     }
 
-    protected void OnLongPress()
+    protected void OnLongPress(Vector3 position)
     {
-        eventManager.LongPress(gameObject);
+        if(!worldWide)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+        }
+        eventManager.LongPress(gameObject, position);
     }
 
-    protected void OnClick()
+    protected void OnClick(Vector3 position)
     {
-        eventManager.Click(gameObject);
+        if(!worldWide)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+        }
+        eventManager.Click(gameObject, position);
     }
 }
