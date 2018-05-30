@@ -59,12 +59,13 @@ public class LongPress : MonoBehaviour
 
     void CheckInput()
     {
+        // Check mouse click on UI
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-
             // Increment the timer
             if (Input.GetMouseButton(0))
             {
+                // Save position of click down
                 if (!pressed)
                 {
                     currentMouseDown = Input.mousePosition;
@@ -89,11 +90,14 @@ public class LongPress : MonoBehaviour
                 timer = 0;
                 pressed = false;
             }
+        }
 
-            if (Input.touches.Length > 0)
+        if (Input.touches.Length > 0)
+        {
+            Touch touch = Input.touches[0];
+            // CHeck touch on UI
+            if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
-                Touch touch = Input.touches[0];
-
                 if (touch.phase == TouchPhase.Began)
                 {
                     touchTime = Time.time;
@@ -106,23 +110,22 @@ public class LongPress : MonoBehaviour
                     {
                         if (Time.time - touchTime <= pressTime)
                         {
-                            //do stuff as a tap​
-                            OnClick(new Vector3(touch.position.x, 0, touch.position.y));
+                            OnClick(new Vector3(touch.position.x, touch.position.y, 0));
                         }
                         else
                         {
-                            // this is a long press
-                            OnLongPress(new Vector3(touch.position.x, 0, touch.position.y));
+                            OnLongPress(new Vector3(touch.position.x, touch.position.y, 0));
                         }
                     }
                 }
             }
         }
+
     }
 
     protected void OnLongPress(Vector3 position)
     {
-        if(!worldWide)
+        if (!worldWide)
         {
             EventSystem.current.SetSelectedGameObject(gameObject);
         }
@@ -131,7 +134,7 @@ public class LongPress : MonoBehaviour
 
     protected void OnClick(Vector3 position)
     {
-        if(!worldWide)
+        if (!worldWide)
         {
             EventSystem.current.SetSelectedGameObject(gameObject);
         }
