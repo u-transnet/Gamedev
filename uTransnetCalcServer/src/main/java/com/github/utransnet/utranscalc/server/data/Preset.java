@@ -17,6 +17,9 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"presetMaterials"})
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name"})
+)
 public class Preset implements Serializable {
 
     private static final long serialVersionUID = 1L;

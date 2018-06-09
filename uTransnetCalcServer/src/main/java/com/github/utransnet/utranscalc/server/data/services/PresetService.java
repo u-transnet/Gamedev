@@ -62,4 +62,8 @@ public class PresetService extends AbstractService<Preset, PresetRepository> {
         entity.getPresetMaterials().forEach(presetMaterialService::delete);
         super.delete(entity);
     }
+
+    public Preset findByName(String name) {
+        return repository.findByName(name);
+    }
 }

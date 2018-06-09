@@ -1,7 +1,8 @@
 package com.github.utransnet.utranscalc.server;
 
 
-import com.github.utransnet.utranscalc.EnvelopeOuterClass;
+import com.github.utransnet.utranscalc.Protos;
+import com.github.utransnet.utranscalc.server.transport.NetworkFacade;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -18,20 +19,22 @@ import java.util.concurrent.ExecutorService;
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private final ExecutorService executorService;
+    private final NetworkFacade networkFacade;
 
-    ServerChannelInitializer(ExecutorService executorService) {
+    ServerChannelInitializer(ExecutorService executorService, NetworkFacade networkFacade) {
         this.executorService = executorService;
+        this.networkFacade = networkFacade;
     }
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline p = ch.pipeline();
         p.addLast(new ProtobufVarint32FrameDecoder());
-        p.addLast(new ProtobufDecoder(EnvelopeOuterClass.Envelope.getDefaultInstance()));
+        p.addLast(new ProtobufDecoder(Protos.Request.getDefaultInstance()));
 
         p.addLast(new ProtobufVarint32LengthFieldPrepender());
         p.addLast(new ProtobufEncoder());
 
-        p.addLast(new ProtocolServerHandler(executorService));
+        p.addLast(new ProtocolServerHandler(executorService, networkFacade));
     }
 }

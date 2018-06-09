@@ -18,6 +18,9 @@ import static javax.persistence.CascadeType.*;
 @Data
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"presetMaterials", "baseObjectMaterials"})
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name"})
+)
 public class Material implements Serializable {
 
     private static final long serialVersionUID = 1L;
