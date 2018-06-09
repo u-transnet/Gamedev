@@ -17,7 +17,7 @@ namespace uTrans.Data
             return point;
         }
 
-        public PointDTO New(int projectId, double x, double y, PointType type)
+        public PointDTO New(long projectId, double x, double y, PointType type)
         {
             var point = new PointDTO();
             point.ProjectId = projectId;
@@ -28,7 +28,7 @@ namespace uTrans.Data
             return point;
         }
 
-        public void UpdateLocation(int id, double x, double y)
+        public void UpdateLocation(long id, double x, double y)
         {
             var point = base.GetById(id);
             point.X = x;
@@ -41,7 +41,7 @@ namespace uTrans.Data
             return FindByProject(project.Id);
         }
 
-        public IEnumerable<PointDTO> FindByProject(int projectId)
+        public IEnumerable<PointDTO> FindByProject(long projectId)
         {
             return Find(point => point.ProjectId == projectId);
         }

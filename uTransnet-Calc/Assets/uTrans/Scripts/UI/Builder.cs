@@ -40,7 +40,7 @@ namespace uTrans.UI
         AbstractMap map;
 
 
-        private PointType currentPointType = PointType.Default;
+        private PointType currentPointType = PointType.Unset;
         private Vector3 currentPosition;
         private bool newPointCanBeSpawned = true;
 
@@ -121,7 +121,7 @@ namespace uTrans.UI
                 builderCanvas.SetActive(true);
                 builderCanvas.GetComponent<OnMapObject>().NewPos(currentPosition);
 
-                spawnManager.SpawnPointWithLink(PointType.Default, currentPosition);
+                spawnManager.SpawnPointWithLink(PointType.Unset, currentPosition);
                 BasePoint point = spawnManager.ActivePoint.GetComponent<BasePoint>();
                 point.Active = false;
             }
@@ -131,7 +131,7 @@ namespace uTrans.UI
         {
             if (go == gameObject)
             {
-                if(currentPointType != PointType.Default)
+                if(currentPointType != PointType.Unset)
                 {
                     currentPosition = Camera.main.ScreenToWorldPoint(position);
                     spawnManager.SpawnPointWithLink(currentPointType, currentPosition);

@@ -35,7 +35,7 @@ namespace uTrans
             }
         }
 
-        public Project NewProject(int id = -1)
+        public Project NewProject(long id = -1)
         {
             var project = ScriptableObject.CreateInstance<Project>();
             if(id < 0){

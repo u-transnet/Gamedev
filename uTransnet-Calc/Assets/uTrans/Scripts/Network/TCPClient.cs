@@ -29,6 +29,7 @@ namespace uTrans.Network
             {
                 clientReceiveThread = new Thread(new ThreadStart(Connect));
                 clientReceiveThread.IsBackground = true;
+                clientReceiveThread.Name = "TCPClient";
                 clientReceiveThread.Start();
             }
             catch (Exception e)
@@ -39,7 +40,7 @@ namespace uTrans.Network
 
         private void Connect()
         {
-            socketConnection = new TcpClient("localhost", 8463);
+            socketConnection = new TcpClient("192.168.1.172", 8463);
             connected = true;
             OnConnect();
         }
@@ -123,12 +124,12 @@ namespace uTrans.Network
         /// <summary>
         /// Convert message into bytes and send it to server using socket connection.
         /// </summary>
-        public void SendMessage(Envelope envelope, Action<Envelope> onResponse = null)
+        public void SendMessage(Request request, Action<Envelope> onResponse = null)
         {
             Debug.Log("Sending message");
             MemoryStream ms = new MemoryStream();
             CodedOutputStream codedStream = new CodedOutputStream(ms);
-            envelope.WriteTo(codedStream);
+            request.WriteTo(codedStream);
             codedStream.Flush();
             SendMessage(ms.ToArray());
 

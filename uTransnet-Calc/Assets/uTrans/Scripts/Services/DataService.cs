@@ -2,7 +2,6 @@ namespace uTrans.Services
 {
     using UnityEngine;
     using uTrans.Data;
-    using utrans.Services;
 
     public class DataService : SingletonBehaviour<DataService>
     {
@@ -15,6 +14,16 @@ namespace uTrans.Services
         public LinkDAO LinkDAO { get; private set; }
 
         public ProjectDAO ProjectDAO { get; private set; }
+
+        public BaseObjectDAO BaseObjectDAO { get; private set; }
+
+        public BaseObjectMaterialDAO BaseObjectMaterialDAO { get; private set; }
+
+        public MaterialDAO MaterialDAO { get; private set; }
+
+        public PresetDAO PresetDAO { get; private set; }
+
+        public PresetMaterialDAO PresetMaterialDAO { get; private set; }
 
 
         [SerializeField]

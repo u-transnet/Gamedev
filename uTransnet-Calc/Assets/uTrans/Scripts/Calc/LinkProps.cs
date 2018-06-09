@@ -7,7 +7,7 @@ using uTrans.Components;
 
 public enum LinkType
 {
-    Default,
+    Unset,
     Soft,
     Rigid
 }

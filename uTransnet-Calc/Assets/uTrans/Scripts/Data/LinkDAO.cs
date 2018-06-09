@@ -8,7 +8,7 @@ namespace uTrans.Data
         {
         }
 
-        public LinkDTO New(int projectId, int firstPointId, int secondPointId)
+        public LinkDTO New(long projectId, long firstPointId, long secondPointId)
         {
             var link = new LinkDTO();
             link.ProjectId = projectId;
@@ -23,7 +23,7 @@ namespace uTrans.Data
             return FindByProject(project.Id);
         }
 
-        public IEnumerable<LinkDTO> FindByProject(int projectId)
+        public IEnumerable<LinkDTO> FindByProject(long projectId)
         {
             return Find(point => point.ProjectId == projectId);
         }

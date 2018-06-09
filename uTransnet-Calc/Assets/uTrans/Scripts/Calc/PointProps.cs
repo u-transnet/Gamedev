@@ -5,7 +5,7 @@ namespace uTrans.Calc
 
     public enum PointType
     {
-        Default,
+        Unset,
         Light,
         Heavy
 

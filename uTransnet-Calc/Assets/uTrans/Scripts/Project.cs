@@ -160,7 +160,7 @@ namespace uTrans
         /// </summary>
         /// <param name="point"></param>
         /// <param name="id">-1 for new point</param>
-        public void AddPoint(GameObject point, int id)
+        public void AddPoint(GameObject point, long id)
         {
             BasePoint basePoint = point.GetComponent<BasePoint>();
             basePoint.project = this;
@@ -269,7 +269,7 @@ namespace uTrans
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Point or null if not found</returns>
-        public GameObject FindPointById(int id)
+        public GameObject FindPointById(long id)
         {
             foreach (GameObject point in points)
             {

@@ -1,5 +1,6 @@
 using uTrans.Calc;
 using uTrans.Components;
+using uTrans.Network;
 using uTrans.Services;
 
 namespace uTrans
@@ -19,6 +20,16 @@ namespace uTrans
         void Awake()
         {
             map.OnInitialized += PlacePoints;
+            ServerCommunication.ListPresets(presetDTOs => {
+//                Loom.QueueOnMainThread(() => {
+                    foreach (var preset in presetDTOs)
+                    {
+                        ServerCommunication.GetPresetMaterials(preset.Id, presetMaterials => {
+                            Debug.Log(presetMaterials);
+                        });
+                    }
+//                });
+            });
         }
 
         void PlacePoints()

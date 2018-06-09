@@ -123,7 +123,7 @@ namespace uTrans
             PointerUsed = false;
         }
 
-        public GameObject Spawn(PointType pointType, Vector3 pos, int id = -1)
+        public GameObject Spawn(PointType pointType, Vector3 pos, long id = -1)
         {
             if (ProjectsEditor.ActiveProject == null)
             {

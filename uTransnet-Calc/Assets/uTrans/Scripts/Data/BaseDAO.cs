@@ -24,7 +24,7 @@ namespace uTrans.Data
             return dataService.GetAll<T>();
         }
 
-        public T GetById(int id)
+        public T GetById(long id)
         {
             return dataService.GetById<T>(id);
         }
@@ -49,7 +49,7 @@ namespace uTrans.Data
             dataService.Delete(dto);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             dataService.Delete<T>(id);
         }

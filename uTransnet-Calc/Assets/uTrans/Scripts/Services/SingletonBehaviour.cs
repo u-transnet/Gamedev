@@ -1,4 +1,4 @@
-namespace utrans.Services
+namespace uTrans.Services
 {
     using UnityEngine;
 
