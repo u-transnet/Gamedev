@@ -1,0 +1,99 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    ext {
+        springBootVersion = '2.0.2.RELEASE'
+        protobyfPluginVersion = '0.8.5'
+    }
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:$protobyfPluginVersion"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id 'org.springframework.boot' version '2.0.2.RELEASE'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'java'
+    id 'com.google.protobuf' version '0.8.5'
+}
+
+group 'com.github.utransnet.utranscalc'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "http://maven.vaadin.com/vaadin-addons"
+    }
+}
+
+ext {
+    vaadinVersion = '8.4.1'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('com.vaadin:vaadin-spring-boot-starter')
+    runtime('com.h2database:h2')
+
+    compile "org.vaadin.crudui:crudui:2.3.0"
+    compile "org.vaadin:viritin:2.5"
+    compile "javax.validation:validation-api:2.0.1.Final"
+    compile 'org.hibernate.validator:hibernate-validator:6.0.10.Final'
+    compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
+    compile group: 'el-impl', name: 'el-impl', version: '1.0'
+
+
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.5.1'
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+protobuf {
+    protoc {
+        path = System.getenv('PROTOC_HOME') + "/bin/protoc"
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                csharp {
+                    //"uTransnetCalcServer/build/generated/source/proto/main/../../../../uTransnet-Calc/Assets/Proto"
+                    outputSubDir = "../../../../../../uTransnet-Calc/Assets/Proto"
+                }
+                python { }
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            // In addition to the default 'src/main/proto'
+            srcDir '../uTransnetCalcProto'
+        }
+        java {
+            srcDir 'build/generated/source/proto/main/java'
+        }
+    }
+}
