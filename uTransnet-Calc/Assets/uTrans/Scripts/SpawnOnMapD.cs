@@ -29,7 +29,9 @@ namespace uTrans
 
 
         [SerializeField]
-        int defaultLinkDistance = 200;
+        int minLinkDistance = 150;
+        [SerializeField]
+        int maxLinkDistance = 250;
 
         [SerializeField]
         public Text debugText;
@@ -245,13 +247,14 @@ namespace uTrans
 
                 double distance = ruler.Distance(array1, array2);
                 double bearing = ruler.Bearing(array1, array2);
-                int pylonsCount = (int) (distance / defaultLinkDistance);
+                int bestDistance = FindBestDistance(maxLinkDistance, minLinkDistance, distance, 10);
+                int pylonsCount = (int) (distance / bestDistance);
 
                 double[] pylonPosition = array1;
                 GameObject prevPylon = ActivePoint;
                 for (int i = 0; i < pylonsCount; i++)
                 {
-                    pylonPosition = ruler.Destination(pylonPosition, defaultLinkDistance, bearing);
+                    pylonPosition = ruler.Destination(pylonPosition, bestDistance, bearing);
                     GameObject newPylon = Spawn(
                             PointType.Pylon,
                             _map.GeoToWorldPositionXZ(new Vector2d(pylonPosition[1], pylonPosition[0]))
@@ -266,6 +269,24 @@ namespace uTrans
             {
                 CreateLink(ActivePoint, PrevPoint);
             }
+        }
+
+
+        private int FindBestDistance(int maxDistance, int minDistance, double totalDistance, int steps)
+        {
+            int step = (maxDistance - minDistance) / steps;
+            int highestReminder = 0;
+            int bestDisteance = 0;
+            for(int tmp = minDistance; tmp <= maxDistance; tmp += step)
+            {
+                int reminder = (int) totalDistance % tmp;
+                if(reminder > highestReminder) {
+                    highestReminder = reminder;
+                    bestDisteance = tmp;
+                }
+            }
+
+            return bestDisteance;
         }
 
         private void CreateLink(GameObject g1, GameObject g2)
