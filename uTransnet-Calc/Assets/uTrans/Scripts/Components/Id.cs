@@ -6,9 +6,9 @@ namespace uTrans.Components
     public class Id : MonoBehaviour
     {
         [SerializeField]
-        private long _value;
+        private int _value;
 
-        public long Value
+        public int Value
         {
             get
             {

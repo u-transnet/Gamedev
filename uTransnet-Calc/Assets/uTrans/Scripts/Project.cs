@@ -166,7 +166,7 @@ namespace uTrans
             basePoint.project = this;
             points.Add(point);
             var componentId = basePoint.GetComponent<Id>();
-            componentId.Value = id;
+            componentId.Value = (int) id;
             OnProjectChanged(this);
         }
 

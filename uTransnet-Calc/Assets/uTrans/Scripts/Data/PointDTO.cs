@@ -5,12 +5,12 @@ namespace uTrans.Data
     public class PointDTO : BaseDTO
     {
         [PrimaryKey, AutoIncrement]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [Indexed]
-        public long ProjectId  { get; set; }
+        public int ProjectId  { get; set; }
 
-        public long BaseObjectId  { get; set; }
+        public int BaseObjectId  { get; set; }
 
         public double X { get; set; }
 

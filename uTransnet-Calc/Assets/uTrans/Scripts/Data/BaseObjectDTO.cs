@@ -5,7 +5,7 @@ namespace uTrans.Data
     public class BaseObjectDTO : BaseDTO
     {
         [PrimaryKey]
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
         public int MinSize { get; set; }
