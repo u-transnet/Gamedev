@@ -40,7 +40,7 @@ namespace uTrans
                 foreach (var point in DataService.instance.PointDAO.FindByProject(project))
                 {
                     var worldPosition = map.GeoToWorldPosition(new Vector2d(point.X, point.Y));
-                    spawnOnMapD.Spawn((PointType) point.Type, worldPosition, point.Id);
+                    spawnOnMapD.ActivePoint = spawnOnMapD.Spawn((PointType) point.Type, worldPosition, point.Id);
                 }
 
                 foreach (var link in DataService.instance.LinkDAO.FindByProject(project))

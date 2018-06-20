@@ -52,11 +52,11 @@ namespace uTrans.UI
 
             pointLight.GetComponent<Button>().onClick.AddListener(() =>
             {
-                currentPointType = PointType.Light;
+                currentPointType = PointType.AnchorPylon;
                 BuildPoint();
             });
             pointHeavy.GetComponent<Button>().onClick.AddListener(() => {
-                currentPointType = PointType.Heavy;
+                currentPointType = PointType.Terminal;
                 BuildPoint();
             });
             cancelBuildingButton.GetComponent<Button>().onClick.AddListener(() => {
@@ -121,7 +121,7 @@ namespace uTrans.UI
                 builderCanvas.SetActive(true);
                 builderCanvas.GetComponent<OnMapObject>().NewPos(currentPosition);
 
-                spawnManager.SpawnPointWithLink(PointType.Unset, currentPosition);
+                spawnManager.SpawnPointWithLink(PointType.Terminal, currentPosition);
                 BasePoint point = spawnManager.ActivePoint.GetComponent<BasePoint>();
                 point.Active = false;
             }
