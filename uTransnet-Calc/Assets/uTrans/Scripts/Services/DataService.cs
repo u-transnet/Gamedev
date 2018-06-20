@@ -37,10 +37,21 @@ namespace uTrans.Services
             PrepareTable<PointDTO>();
             PrepareTable<LinkDTO>();
             PrepareTable<ProjectDTO>();
+            PrepareTable<BaseObjectDTO>();
+            PrepareTable<BaseObjectMaterialDTO>();
+            PrepareTable<MaterialDTO>();
+            PrepareTable<PresetDTO>();
+            PrepareTable<PresetMaterialDTO>();
+
 
             PointDAO = new PointDAO(DBCon);
             LinkDAO = new LinkDAO(DBCon);
             ProjectDAO = new ProjectDAO(DBCon);
+            BaseObjectDAO = new BaseObjectDAO(DBCon);
+            BaseObjectMaterialDAO = new BaseObjectMaterialDAO(DBCon);
+            MaterialDAO = new MaterialDAO(DBCon);
+            PresetDAO = new PresetDAO(DBCon);
+            PresetMaterialDAO = new PresetMaterialDAO(DBCon);
         }
 
         private void PrepareTable<T>() where T : BaseDTO

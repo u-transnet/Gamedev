@@ -36,7 +36,7 @@ namespace uTrans.Network
                     foreach (Preset item in response.Presets)
                     {
                         PresetDTO preset = new PresetDTO();
-                        preset.Id = item.Id;
+                        preset.Id = (int) item.Id;
                         preset.Name = item.Name;
                         presetList.Add(preset);
                     }
@@ -45,7 +45,7 @@ namespace uTrans.Network
             });
         }
 
-        public static void GetPresetMaterials(long presetId, Action<List<PresetMaterialDTO>> callback)
+        public static void GetPresetMaterials(int presetId, Action<List<PresetMaterialDTO>> callback)
         {
             Request request = new Request();
             request.Type = uTrans.Proto.Type.GetPresetMaterials;
@@ -59,7 +59,7 @@ namespace uTrans.Network
                     foreach (PresetMaterial item in response.PresetMaterials)
                     {
                         PresetMaterialDTO preset = new PresetMaterialDTO();
-                        preset.MaterialId = item.MaterialId;
+                        preset.MaterialId = (int) item.MaterialId;
                         preset.PresetId = presetId;
                         preset.Price = item.Price;
                         presetList.Add(preset);
@@ -83,7 +83,7 @@ namespace uTrans.Network
                     foreach (BaseObject item in response.BaseObjects)
                     {
                         BaseObjectDTO preset = new BaseObjectDTO();
-                        preset.Id = item.Id;
+                        preset.Id = (int) item.Id;
                         preset.Name = item.Name;
                         preset.MaxSize = item.MaxSize;
                         preset.MinSize = item.MinSize;
@@ -96,7 +96,7 @@ namespace uTrans.Network
         }
 
 
-        public static void GetRequiredMaterialsForBaseObject(long baseObjectId, Action<List<BaseObjectMaterialDTO>> callback)
+        public static void GetRequiredMaterialsForBaseObject(int baseObjectId, Action<List<BaseObjectMaterialDTO>> callback)
         {
             Request request = new Request();
             request.Type = uTrans.Proto.Type.GetRequiredMaterialsForBaseObject;
@@ -111,7 +111,7 @@ namespace uTrans.Network
                     {
                         BaseObjectMaterialDTO preset = new BaseObjectMaterialDTO();
                         preset.BaseObjectId = baseObjectId;
-                        preset.MaterialId = item.MaterialId;
+                        preset.MaterialId = (int) item.MaterialId;
                         preset.Amount = item.Amount;
                         preset.OnExploitation = item.OnExploitation;
                         presetList.Add(preset);
@@ -135,7 +135,7 @@ namespace uTrans.Network
                     foreach (Material item in response.Materials)
                     {
                         MaterialDTO preset = new MaterialDTO();
-                        preset.Id = item.Id;
+                        preset.Id = (int) item.Id;
                         preset.Name = item.Name;
                         preset.Unit = item.Unit;
                         preset.Income = item.Income;
@@ -147,7 +147,7 @@ namespace uTrans.Network
         }
 
 
-        private static Request.Types.OptionalId CreateOptionalId(long presetId)
+        private static Request.Types.OptionalId CreateOptionalId(int presetId)
         {
             Request.Types.OptionalId optionalId = new Request.Types.OptionalId();
             optionalId.IsSet = true;

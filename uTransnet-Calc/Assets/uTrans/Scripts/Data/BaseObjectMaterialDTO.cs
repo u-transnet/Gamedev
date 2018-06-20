@@ -6,9 +6,9 @@ namespace uTrans.Data
     {
 
         [PrimaryKey, AutoIncrement]
-        public long Id { get; set; }
-        public long BaseObjectId { get; set; }
-        public long MaterialId { get; set; }
+        public int Id { get; set; }
+        public int BaseObjectId { get; set; }
+        public int MaterialId { get; set; }
         public int Amount { get; set; }
         public bool OnExploitation { get; set; }
     }
