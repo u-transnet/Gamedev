@@ -34,10 +34,10 @@ namespace uTrans.Components
                 pointProps.pointType = value;
                 switch (value)
                 {
-                    case uTrans.Calc.PointType.Heavy:
+                    case uTrans.Calc.PointType.Terminal:
                         objectRenderer.material = heavyMaterial;
                     break;
-                    case uTrans.Calc.PointType.Light:
+                    case uTrans.Calc.PointType.AnchorPylon:
                         objectRenderer.material = lightMaterial;
                     break;
                 }

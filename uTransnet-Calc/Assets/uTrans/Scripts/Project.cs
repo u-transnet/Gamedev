@@ -160,13 +160,13 @@ namespace uTrans
         /// </summary>
         /// <param name="point"></param>
         /// <param name="id">-1 for new point</param>
-        public void AddPoint(GameObject point, long id)
+        public void AddPoint(GameObject point, int id)
         {
             BasePoint basePoint = point.GetComponent<BasePoint>();
             basePoint.project = this;
             points.Add(point);
             var componentId = basePoint.GetComponent<Id>();
-            componentId.Value = (int) id;
+            componentId.Value = id;
             OnProjectChanged(this);
         }
 

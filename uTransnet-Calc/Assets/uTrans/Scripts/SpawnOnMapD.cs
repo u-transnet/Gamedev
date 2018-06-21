@@ -1,4 +1,6 @@
-﻿using uTrans.Calc;
+﻿using Mapbox.CheapRulerCs;
+using Mapbox.Utils;
+using uTrans.Calc;
 
 namespace uTrans
 {
@@ -14,13 +16,22 @@ namespace uTrans
         AbstractMap _map;
 
         [SerializeField]
-        GameObject _markerPrefab;
+        GameObject _terminalPrefab;
+
+        [SerializeField]
+        GameObject _pylonPrefab;
 
         [SerializeField]
         GameObject _linkPrefab;
 
         [SerializeField]
         Camera cam;
+
+
+        [SerializeField]
+        int minLinkDistance = 150;
+        [SerializeField]
+        int maxLinkDistance = 250;
 
         [SerializeField]
         public Text debugText;
@@ -123,21 +134,29 @@ namespace uTrans
             PointerUsed = false;
         }
 
-        public GameObject Spawn(PointType pointType, Vector3 pos, long id = -1)
+        public GameObject Spawn(PointType pointType, Vector3 pos, int id = -1)
         {
             if (ProjectsEditor.ActiveProject == null)
             {
                 ProjectsEditor.NewProject();
             }
 
-            ActivePoint = Instantiate(_markerPrefab);
-            BasePoint basePoint = ActivePoint.GetComponent<BasePoint>();
+            GameObject curPoint;
+            if(pointType == PointType.Terminal)
+            {
+                curPoint = Instantiate(_terminalPrefab);
+            }
+            else
+            {
+                curPoint = Instantiate(_pylonPrefab);
+            }
+            BasePoint basePoint = curPoint.GetComponent<BasePoint>();
             basePoint.onMapObject.SetMap(_map);
             basePoint.onMapObject.NewPos(pos);
             basePoint.draggableObject.BuildingManager = this;
             basePoint.PointType = pointType;
-            ProjectsEditor.ActiveProject.AddPoint(ActivePoint, id);
-            return ActivePoint;
+            ProjectsEditor.ActiveProject.AddPoint(curPoint, id);
+            return curPoint;
         }
 
         public void SpawnOnCenter(PointType pointType)
@@ -151,13 +170,12 @@ namespace uTrans
             SpawnPointWithLink(pointType, objectPos);
 
         }
-
         public void SpawnPointWithLink(PointType pointType, Vector3 pos)
         {
-            Spawn(pointType, pos);
+            ActivePoint = Spawn(pointType, pos);
             if (ActivePoint != null && PrevPoint != null)
             {
-                CreateLink();
+                CreateLink(false);
             }
         }
 
@@ -201,9 +219,74 @@ namespace uTrans
             ProjectsEditor.FinishProject();
         }
 
-        private void CreateLink()
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="direct"></param> true if we don't need automatic pylons between points
+        private void CreateLink(bool direct)
         {
-            CreateLink(ActivePoint, PrevPoint);
+            if(!direct)
+            {
+                BasePoint firstPoint = ActivePoint.GetComponent<BasePoint>();
+                BasePoint secondPoint = PrevPoint.GetComponent<BasePoint>();
+                CheapRuler ruler = new CheapRuler(
+                        firstPoint.onMapObject.Location.x,
+                        CheapRulerUnits.Meters
+                );
+
+                double[] array1 =
+                {
+                    firstPoint.onMapObject.Location.y,
+                    firstPoint.onMapObject.Location.x
+                };
+                double[] array2 =
+                {
+                    secondPoint.onMapObject.Location.y,
+                    secondPoint.onMapObject.Location.x
+                };
+
+                double distance = ruler.Distance(array1, array2);
+                double bearing = ruler.Bearing(array1, array2);
+                int bestDistance = FindBestDistance(maxLinkDistance, minLinkDistance, distance, 10);
+                int pylonsCount = (int) (distance / bestDistance);
+
+                double[] pylonPosition = array1;
+                GameObject prevPylon = ActivePoint;
+                for (int i = 0; i < pylonsCount; i++)
+                {
+                    pylonPosition = ruler.Destination(pylonPosition, bestDistance, bearing);
+                    GameObject newPylon = Spawn(
+                            PointType.Pylon,
+                            _map.GeoToWorldPositionXZ(new Vector2d(pylonPosition[1], pylonPosition[0]))
+                    );
+                    newPylon.GetComponent<BasePoint>().Active = false;
+                    CreateLink(newPylon, prevPylon);
+                    prevPylon = newPylon;
+                }
+                CreateLink(PrevPoint, prevPylon);
+            }
+            else
+            {
+                CreateLink(ActivePoint, PrevPoint);
+            }
+        }
+
+
+        private int FindBestDistance(int maxDistance, int minDistance, double totalDistance, int steps)
+        {
+            int step = (maxDistance - minDistance) / steps;
+            int highestReminder = 0;
+            int bestDisteance = 0;
+            for(int tmp = minDistance; tmp <= maxDistance; tmp += step)
+            {
+                int reminder = (int) totalDistance % tmp;
+                if(reminder > highestReminder) {
+                    highestReminder = reminder;
+                    bestDisteance = tmp;
+                }
+            }
+
+            return bestDisteance;
         }
 
         private void CreateLink(GameObject g1, GameObject g2)

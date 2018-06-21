@@ -3724,11 +3724,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 75090401}
-  _markerPrefab: {fileID: 1860605206661222, guid: 2a6aacf8db9795642bc5917ce051837f,
+  _terminalPrefab: {fileID: 1860605206661222, guid: 2a6aacf8db9795642bc5917ce051837f,
+    type: 2}
+  _pylonPrefab: {fileID: 1578489113416600, guid: 9278275414ce4834a9ee3b5244b9cef8,
     type: 2}
   _linkPrefab: {fileID: 1837309675280410, guid: 9fe9b4eeea96b54449e839b52930d9b7,
     type: 2}
   cam: {fileID: 1432818142}
+  defaultLinkDistance: 200
   debugText: {fileID: 503979617}
 --- !u!4 &1234826373
 Transform:

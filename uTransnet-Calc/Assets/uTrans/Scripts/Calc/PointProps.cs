@@ -6,8 +6,10 @@ namespace uTrans.Calc
     public enum PointType
     {
         Unset,
-        Light,
-        Heavy
+        Terminal,
+        Pylon,
+        HighPylon,
+        AnchorPylon
 
     }
 
