@@ -17,6 +17,15 @@ enum Type {
     listMaterials = 5;
 }
 
+enum Units {
+    usd = 0;
+    kg = 1;
+    t = 2;
+    m = 3;
+    km = 4;
+    cnt = 5;
+}
+
 message Envelope {
     Type type = 1;
 
@@ -50,7 +59,7 @@ message PresetMaterial {
 message Material {
     int64 id = 1;
     string name = 2;
-    string unit = 3;
+    Units unit = 3;
     bool income = 4;
 }
 
@@ -66,6 +75,9 @@ message BaseObjectMaterial {
     int64 material_id = 1;
     int32 amount = 2;
     bool on_exploitation = 3;
+    bool user_editable = 4;
+    int32 group_number = 5;
+    int32 number_in_group = 6;
 }
 
 message Error {

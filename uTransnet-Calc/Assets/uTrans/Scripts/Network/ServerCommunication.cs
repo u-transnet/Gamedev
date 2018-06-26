@@ -114,6 +114,9 @@ namespace uTrans.Network
                         preset.MaterialId = (int) item.MaterialId;
                         preset.Amount = item.Amount;
                         preset.OnExploitation = item.OnExploitation;
+                        preset.UserEditable = item.UserEditable;
+                        preset.GroupNumber = item.GroupNumber;
+                        preset.NumberInGroup = item.NumberInGroup;
                         presetList.Add(preset);
                     }
                     callback(presetList);
@@ -137,7 +140,7 @@ namespace uTrans.Network
                         MaterialDTO preset = new MaterialDTO();
                         preset.Id = (int) item.Id;
                         preset.Name = item.Name;
-                        preset.Unit = item.Unit;
+                        preset.Unit = (uTrans.Data.Unit) ((int) item.Unit); // Convert by id
                         preset.Income = item.Income;
                         presetList.Add(preset);
                     }

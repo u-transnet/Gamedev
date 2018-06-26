@@ -33,7 +33,7 @@ public class Material implements Serializable {
     private String name;
 
     @NotNull
-    private String unit;
+    private Units unit;
 
     private boolean income = false;
 

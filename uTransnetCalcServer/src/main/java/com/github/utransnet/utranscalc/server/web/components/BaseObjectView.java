@@ -94,11 +94,11 @@ public class BaseObjectView extends VerticalLayout implements View {
         materialsGrid.setDeleteOperation(baseObjectMaterialService::delete);
         CrudFormFactory<BaseObjectMaterial> materialFormFactory = materialsGrid.getCrudFormFactory();
         materialFormFactory.setUseBeanValidation(true);
-        materialFormFactory.setVisibleProperties(CrudOperation.READ, "id", "material", "amount", "onExploitation");
-        materialFormFactory.setVisibleProperties(CrudOperation.ADD, "material", "amount", "onExploitation");
-        materialFormFactory.setVisibleProperties(CrudOperation.UPDATE, "material", "amount", "onExploitation");
-        materialFormFactory.setVisibleProperties(CrudOperation.DELETE, "id", "material", "amount", "onExploitation");
-        materialsGrid.getGrid().setColumns("id", "material", "amount", "onExploitation");
+        materialFormFactory.setVisibleProperties(CrudOperation.READ, "id", "material", "amount", "onExploitation", "userEditable", "groupNumber", "numberInGroup");
+        materialFormFactory.setVisibleProperties(CrudOperation.ADD, "material", "amount", "onExploitation", "userEditable", "groupNumber", "numberInGroup");
+        materialFormFactory.setVisibleProperties(CrudOperation.UPDATE, "material", "amount", "onExploitation", "userEditable", "groupNumber", "numberInGroup");
+        materialFormFactory.setVisibleProperties(CrudOperation.DELETE, "id", "material", "amount", "onExploitation", "userEditable", "groupNumber", "numberInGroup");
+        materialsGrid.getGrid().setColumns("id", "material", "amount", "onExploitation", "userEditable", "groupNumber", "numberInGroup");
         materialFormFactory.setFieldProvider("material", () -> {
             ComboBox<Material> comboBox = new ComboBox<>("Material", materialService.findAll());
             comboBox.setEmptySelectionAllowed(false);

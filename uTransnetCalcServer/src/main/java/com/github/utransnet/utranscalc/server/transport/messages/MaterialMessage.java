@@ -2,6 +2,7 @@ package com.github.utransnet.utranscalc.server.transport.messages;
 
 import com.github.utransnet.utranscalc.Protos;
 import com.github.utransnet.utranscalc.server.data.Material;
+import com.github.utransnet.utranscalc.server.data.Units;
 import com.google.protobuf.GeneratedMessageV3;
 import lombok.Data;
 
@@ -12,7 +13,7 @@ import lombok.Data;
 public class MaterialMessage implements Message<Protos.Material> {
     private long id;
     private String name;
-    private String unit;
+    private Units unit;
     private boolean income;
 
     public MaterialMessage(Material material) {
@@ -27,7 +28,7 @@ public class MaterialMessage implements Message<Protos.Material> {
         return Protos.Material.newBuilder()
                 .setId(id)
                 .setName(name)
-                .setName(unit)
+                .setUnit(Protos.Units.valueOf(unit.name()))
                 .setIncome(income)
                 .build();
     }

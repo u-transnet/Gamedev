@@ -2,7 +2,6 @@ package com.github.utransnet.utranscalc.server.transport.messages;
 
 import com.github.utransnet.utranscalc.Protos;
 import com.github.utransnet.utranscalc.server.data.BaseObjectMaterial;
-import com.google.protobuf.GeneratedMessageV3;
 import lombok.Data;
 
 /**
@@ -14,11 +13,17 @@ public class BaseObjectMaterialMessage implements Message<Protos.BaseObjectMater
     private MaterialMessage material;
     private int amount;
     private boolean onExploitation;
+    private boolean userEditable;
+    int groupNumber;
+    int numberInGroup;
 
     public BaseObjectMaterialMessage(BaseObjectMaterial baseObjectMaterial) {
         material = new MaterialMessage(baseObjectMaterial.getMaterial());
         amount = baseObjectMaterial.getAmount();
         onExploitation = baseObjectMaterial.isOnExploitation();
+        userEditable = baseObjectMaterial.isUserEditable();
+        groupNumber = baseObjectMaterial.getGroupNumber();
+        numberInGroup = baseObjectMaterial.getNumberInGroup();
     }
 
     @Override
@@ -27,6 +32,9 @@ public class BaseObjectMaterialMessage implements Message<Protos.BaseObjectMater
                 .setMaterialId(material.getId())
                 .setAmount(amount)
                 .setOnExploitation(onExploitation)
+                .setUserEditable(userEditable)
+                .setGroupNumber(groupNumber)
+                .setNumberInGroup(numberInGroup)
                 .build();
     }
 }

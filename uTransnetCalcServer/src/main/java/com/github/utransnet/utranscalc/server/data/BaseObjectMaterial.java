@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * Created by Artem on 04.06.2018.
@@ -31,4 +33,12 @@ public class BaseObjectMaterial {
     private int amount;
 
     private boolean onExploitation;
+
+    private boolean userEditable = false;
+
+    @Min(0)
+    int groupNumber;
+
+    @Min(0)
+    int numberInGroup;
 }
