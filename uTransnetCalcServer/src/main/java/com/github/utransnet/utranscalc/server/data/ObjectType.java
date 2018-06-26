@@ -5,7 +5,7 @@ package com.github.utransnet.utranscalc.server.data;
  */
 public enum ObjectType {
     link(1),
-    point(2),
+    pylon(2),
     station(3);
 
     public int id;

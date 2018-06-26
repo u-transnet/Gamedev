@@ -7,7 +7,7 @@ namespace uTrans.Data
         [PrimaryKey]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Unit { get; set; }
+        public Unit Unit { get; set; }
         public bool Income { get; set; }
     }
 }

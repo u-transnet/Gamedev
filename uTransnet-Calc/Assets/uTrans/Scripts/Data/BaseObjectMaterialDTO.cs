@@ -11,5 +11,8 @@ namespace uTrans.Data
         public int MaterialId { get; set; }
         public int Amount { get; set; }
         public bool OnExploitation { get; set; }
+        public bool UserEditable { get; set; }
+        public int GroupNumber { get; set; }
+        public int NumberInGroup { get; set; }
     }
 }
