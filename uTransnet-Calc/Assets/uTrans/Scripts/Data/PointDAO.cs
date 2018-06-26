@@ -17,22 +17,24 @@ namespace uTrans.Data
             return point;
         }
 
-        public PointDTO New(int projectId, double x, double y, PointType type)
+        public PointDTO New(int projectId, double x, double y, float height, PointType type)
         {
             var point = new PointDTO();
             point.ProjectId = projectId;
             point.X = x;
             point.Y = y;
+            point.Height = height;
             point.Type = (int) type;
             base.Insert(point);
             return point;
         }
 
-        public void UpdateLocation(int id, double x, double y)
+        public void UpdateLocationAndHeight(int id, double x, double y, float height)
         {
             var point = base.GetById(id);
             point.X = x;
             point.Y = y;
+            point.Height = height;
             base.Update(point);
         }
 

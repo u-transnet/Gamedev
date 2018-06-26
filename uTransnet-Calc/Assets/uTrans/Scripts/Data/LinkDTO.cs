@@ -12,8 +12,8 @@ namespace uTrans.Data
 
 
 
-        public long FirstPointId { get; set; }
+        public int FirstPointId { get; set; }
 
-        public long SecondPointId { get; set; }
+        public int SecondPointId { get; set; }
     }
 }

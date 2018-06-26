@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using System;
+using UnityEngine.UI;
 
 namespace uTrans.Components
 {
@@ -24,6 +25,10 @@ namespace uTrans.Components
         public Project project;
 
         private bool _editable;
+
+        private bool isReady = false;
+
+        public Action OnReady = () => {};
 
         [SerializeField]
         virtual public bool Editable
@@ -67,6 +72,22 @@ namespace uTrans.Components
                         collidingObject.enabled = value;
                     }
                 }
+            }
+        }
+
+        void Start()
+        {
+            OnReady();
+        }
+
+
+
+        void OnWillRenderObject()
+        {
+            if(!isReady)
+            {
+                OnReady();
+                isReady = true;
             }
         }
     }

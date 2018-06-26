@@ -24,7 +24,7 @@ namespace uTrans.Components
         // Offsets from each target in local space, which scale and rotate with targets.
         public Vector3[] targetLocalOffset = new Vector3[2];
 
-        public event Action<Transform, Transform> OnTargetChange = (oldTarget, newtarget) =>
+        public event Action<int, Transform, Transform> OnTargetChange = (index, oldTarget, newtarget) =>
         {
         };
 
@@ -37,7 +37,7 @@ namespace uTrans.Components
             {
                 var old = targetObj[0];
                 targetObj[0] = value;
-                OnTargetChange(old, value);
+                OnTargetChange(0, old, value);
             }
         }
 
@@ -50,7 +50,7 @@ namespace uTrans.Components
             {
                 var old = targetObj[1];
                 targetObj[1] = value;
-                OnTargetChange(old, value);
+                OnTargetChange(1, old, value);
             }
         }
 

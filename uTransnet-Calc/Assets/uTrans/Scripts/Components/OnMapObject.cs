@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace uTrans.Components
+﻿namespace uTrans.Components
 {
     using System;
+    using System.Collections.Generic;
     using Mapbox.Unity.Map;
     using Mapbox.Utils;
     using UnityEngine;
 
-    public class OnMapObject : MonoBehaviour
+    public class OnMapObject : Component
     {
 
         [SerializeField]
@@ -21,26 +20,28 @@ namespace uTrans.Components
 
 
         [SerializeField]
-        private float _altitude;
+        private float altitude;
 
         public float Altitude
         {
             get
             {
-                return _altitude;
+                return altitude;
             }
             private set
             {
-                _altitude = value;
+                altitude = value;
             }
         }
 
         [SerializeField]
         private AbstractMap map;
 
-        public event Action<Vector2d> OnLocationUpdate = vectorD =>
+        public event Action OnLocationUpdate = () =>
         {
         };
+
+        public event Action OnHeightChanged = () => {};
 
         [SerializeField]
         private Vector2d _location;
@@ -54,7 +55,7 @@ namespace uTrans.Components
             private set
             {
                 _location = value;
-                OnLocationUpdate(_location);
+                OnLocationUpdate();
             }
         }
 
@@ -68,18 +69,25 @@ namespace uTrans.Components
             }
         }
 
-        void Start()
+
+        public OnMapObject()
         {
-            OnLocationUpdate += newLocation =>
+            OnLocationUpdate += () =>
             {
-                Altitude = map.QueryElevationInMetersAt(newLocation);
+                Altitude = map.QueryElevationInMetersAt(Location);
             };
         }
 
-        void OnWillRenderObject()
+        void Awake()
         {
-            // Trigger event
-            Location = Location;
+
+            if(BaseObject != null)
+            {
+                BaseObject.OnReady += () =>
+                {
+                    OnLocationUpdate();
+                };
+            }
         }
 
 
@@ -91,11 +99,11 @@ namespace uTrans.Components
         void Update()
         {
             transform.localPosition = map.GeoToWorldPosition(Location, true);
-            if(heightShift > 0)
+            if (heightShift > 0)
             {
                 transform.localPosition += new Vector3(0, heightShift, 0);
             }
-            if(!fixedScale)
+            if (!fixedScale)
             {
                 var curScale = spawnScale * map.transform.localScale.x;
                 transform.localScale = new Vector3(curScale, curScale, curScale);

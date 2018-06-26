@@ -17,18 +17,16 @@ namespace uTrans
         [SerializeField]
         AbstractMap map;
 
-        void Awake()
+        void Start()
         {
             map.OnInitialized += PlacePoints;
             ServerCommunication.ListPresets(presetDTOs => {
-//                Loom.QueueOnMainThread(() => {
                     foreach (var preset in presetDTOs)
                     {
                         ServerCommunication.GetPresetMaterials(preset.Id, presetMaterials => {
                             Debug.Log(presetMaterials);
                         });
                     }
-//                });
             });
         }
 
@@ -41,6 +39,7 @@ namespace uTrans
                 {
                     var worldPosition = map.GeoToWorldPosition(new Vector2d(point.X, point.Y));
                     spawnOnMapD.ActivePoint = spawnOnMapD.Spawn((PointType) point.Type, worldPosition, point.Id);
+                    spawnOnMapD.ActivePoint.GetComponent<BasePoint>().objectWithHeight.Height = point.Height;
                 }
 
                 foreach (var link in DataService.instance.LinkDAO.FindByProject(project))

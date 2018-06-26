@@ -16,6 +16,8 @@ namespace uTrans.Data
 
         public double Y { get; set; }
 
+        public float Height { get; set; }
+
         public int Type{ get; set; }
     }
 }

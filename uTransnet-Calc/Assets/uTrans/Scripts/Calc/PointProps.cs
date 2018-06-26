@@ -29,6 +29,22 @@ namespace uTrans.Calc
             }
         }
 
+        public float Height
+        {
+            get
+            {
+                return baseObject.objectWithHeight.Height;
+            }
+        }
+
+        public float HeightAboveSea
+        {
+            get
+            {
+                return Height + Altitude;
+            }
+        }
+
         public TerrainType Terrain
         {
             get
