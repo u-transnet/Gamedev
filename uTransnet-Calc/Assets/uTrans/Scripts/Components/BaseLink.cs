@@ -1,5 +1,5 @@
 using System;
-using Mapbox.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace uTrans.Components
@@ -44,21 +44,35 @@ namespace uTrans.Components
             }
         }
 
+        private Dictionary<Transform, Action> updateTargetOffsetCallbacks = new Dictionary<Transform, Action>();
+
         void Awake()
         {
-            stretchy.OnTargetChange += (oldTransform, newTransform) => {
+            stretchy.OnTargetChange += (index, oldTransform, newTransform) => {
                 if(oldTransform != null)
                 {
                     oldTransform.GetComponent<BasePoint>().onMapObject.OnLocationUpdate -= UpdateTextPosition;
+                    oldTransform.GetComponent<BasePoint>().objectWithHeight.OnHeightChanged -= UpdateTextPosition;
+
+                    Action tmp = updateTargetOffsetCallbacks[oldTransform];
+                    oldTransform.GetComponent<BasePoint>().objectWithHeight.OnHeightChanged -= tmp;
+                    updateTargetOffsetCallbacks.Remove(oldTransform);
                 }
                 if(newTransform != null)
                 {
                     newTransform.GetComponent<BasePoint>().onMapObject.OnLocationUpdate += UpdateTextPosition;
+                    newTransform.GetComponent<BasePoint>().objectWithHeight.OnHeightChanged += UpdateTextPosition;
+
+                    Action tmp = () => {
+                        UpdateOffset(index, newTransform);
+                    };
+                    updateTargetOffsetCallbacks.Add(newTransform, tmp);
+                    newTransform.GetComponent<BasePoint>().objectWithHeight.OnHeightChanged += tmp;
                 }
             };
         }
 
-        private void UpdateTextPosition(Vector2d vector2d)
+        private void UpdateTextPosition()
         {
             if(FirstPoint != null && SecondPoint != null)
             {
@@ -70,6 +84,13 @@ namespace uTrans.Components
                 debugText.text = String.Format("Length: {0:0.0}m" +
                     "\nSlope: {1:0}%", linkProps.Length, linkProps.Slope);
             }
+        }
+
+        private void UpdateOffset(int index, Transform target)
+        {
+            float height = target.GetComponent<BasePoint>().objectWithHeight.UnityHeight;
+            stretchy.targetWorldOffset[index] = new Vector3(0, height - 4, 0);
+
         }
     }
 }

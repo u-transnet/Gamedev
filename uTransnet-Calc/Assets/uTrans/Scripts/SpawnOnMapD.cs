@@ -151,9 +151,9 @@ namespace uTrans
                 curPoint = Instantiate(_pylonPrefab);
             }
             BasePoint basePoint = curPoint.GetComponent<BasePoint>();
-            basePoint.onMapObject.SetMap(_map);
+            basePoint.SetMap(_map);
+            basePoint.SetBuildingManager(this);
             basePoint.onMapObject.NewPos(pos);
-            basePoint.draggableObject.BuildingManager = this;
             basePoint.PointType = pointType;
             ProjectsEditor.ActiveProject.AddPoint(curPoint, id);
             return curPoint;
@@ -234,16 +234,8 @@ namespace uTrans
                         CheapRulerUnits.Meters
                 );
 
-                double[] array1 =
-                {
-                    firstPoint.onMapObject.Location.y,
-                    firstPoint.onMapObject.Location.x
-                };
-                double[] array2 =
-                {
-                    secondPoint.onMapObject.Location.y,
-                    secondPoint.onMapObject.Location.x
-                };
+                double[] array1 = GeoUtils.LocationToLongLatArray(firstPoint.onMapObject.Location);
+                double[] array2 = GeoUtils.LocationToLongLatArray(secondPoint.onMapObject.Location);
 
                 double distance = ruler.Distance(array1, array2);
                 double bearing = ruler.Bearing(array1, array2);
@@ -257,7 +249,7 @@ namespace uTrans
                     pylonPosition = ruler.Destination(pylonPosition, bestDistance, bearing);
                     GameObject newPylon = Spawn(
                             PointType.Pylon,
-                            _map.GeoToWorldPositionXZ(new Vector2d(pylonPosition[1], pylonPosition[0]))
+                            _map.GeoToWorldPositionXZ( GeoUtils.LongLatArrayToLocation(pylonPosition))
                     );
                     newPylon.GetComponent<BasePoint>().Active = false;
                     CreateLink(newPylon, prevPylon);
@@ -318,26 +310,28 @@ namespace uTrans
 
         public void OnLongPress(GameObject go, Vector3 position)
         {
-            if (go.GetComponent<BasePoint>() != null)
+            Transform parent = go.transform.parent;
+            if (parent != null && parent.GetComponent<BasePoint>() != null)
             {
-                Debug.Log("Pressed " + go.name);
+                Debug.Log("Pressed " + parent.name);
                 if (ProjectsEditor.ActiveProject == null)
                 {
-                    ProjectsEditor.FindActiveProject(go);
+                    ProjectsEditor.FindActiveProject(parent.gameObject);
                 }
             }
         }
 
         public void OnClick(GameObject go, Vector3 position)
         {
-            if (go.GetComponent<BasePoint>() != null)
+            Transform parent = go.transform.parent;
+            if (parent != null && parent.GetComponent<BasePoint>() != null)
             {
-                Debug.Log("Clicked " + go.name);
+                Debug.Log("Clicked " + parent.name);
                 if (ProjectsEditor.ActiveProject != null)
                 {
-                    if (ProjectsEditor.ActiveProject.Contains(go))
+                    if (ProjectsEditor.ActiveProject.Contains(parent.gameObject))
                     {
-                        ActivePoint = go;
+                        ActivePoint = parent.gameObject;
                     }
                 }
             }

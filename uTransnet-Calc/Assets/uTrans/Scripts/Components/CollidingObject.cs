@@ -2,11 +2,10 @@
 {
     using UnityEngine;
 
-    public class CollidingObject : MonoBehaviour
+    public class CollidingObject : Component
     {
-        public Collider NodeCollider { get; private set; }
-
-        public Renderer NodeRenderer { get; private set; }
+        [SerializeField]
+        private Renderer nodeRenderer;
 
         public string[] usedTags;
         public string[] ignoredTags;
@@ -25,37 +24,26 @@
         /// </summary>
         private int collisions;
 
-        private OnMapObject uObject;
 
         [SerializeField]
         Color defaultColor;
-
-
-        // Use this for initialization
-        void Awake()
-        {
-            uObject = GetComponent<OnMapObject>();
-            NodeCollider = GetComponent<Collider>();
-            NodeRenderer = GetComponent<Renderer>();
-            //defaultColor = NodeRenderer.material.color;
-        }
 
         // Update is called once per frame
         void Update()
         {
             if (Colliding)
             {
-                NodeRenderer.material.color = new Color(0.8f, 0, 0, 0.5f);
+                nodeRenderer.material.color = new Color(0.8f, 0, 0, 0.5f);
             }
             else
             {
-                NodeRenderer.material.color = new Color(0, 0.8f, 0, 0.5f);
+                nodeRenderer.material.color = new Color(0, 0.8f, 0, 0.5f);
             }
         }
 
         public void Disable()
         {
-            NodeRenderer.material.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, NodeRenderer.material.color.a);
+            nodeRenderer.material.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, nodeRenderer.material.color.a);
             enabled = false;
         }
 

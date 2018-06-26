@@ -24,7 +24,7 @@ public class LinkProps : MonoBehaviour
     {
         get
         {
-            return (baseObject.FirstPoint.onMapObject.Altitude + baseObject.SecondPoint.onMapObject.Altitude) / 2;
+            return (baseObject.FirstPoint.pointProps.HeightAboveSea + baseObject.SecondPoint.pointProps.HeightAboveSea) / 2;
         }
     }
 
@@ -32,7 +32,7 @@ public class LinkProps : MonoBehaviour
     {
         get
         {
-            return Math.Abs(baseObject.FirstPoint.onMapObject.Altitude - baseObject.SecondPoint.onMapObject.Altitude);
+            return Math.Abs(baseObject.FirstPoint.pointProps.HeightAboveSea - baseObject.SecondPoint.pointProps.HeightAboveSea);
         }
     }
 

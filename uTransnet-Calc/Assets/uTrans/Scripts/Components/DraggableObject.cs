@@ -5,7 +5,7 @@
     using Mapbox.Utils;
     using UnityEngine;
 
-    public class DraggableObject : MonoBehaviour
+    public class DraggableObject : Component
     {
 
 
@@ -16,7 +16,7 @@
 
         Vector3 gap = Vector3.zero;
 
-        public SpawnOnMapD BuildingManager { get; set; }
+        internal SpawnOnMapD buildingManager;
 
         public Action<Vector3, Vector2d> OnDragFinished = (vector3, vector2D) =>
         {
@@ -45,13 +45,13 @@
 
             distance = Vector3.Distance(transform.position, Camera.main.transform.position);
             dragging = true;
-            BuildingManager.PointerUsed = true;
+            buildingManager.PointerUsed = true;
         }
 
         void OnMouseUp()
         {
             dragging = false;
-            BuildingManager.PointerUsed = false;
+            buildingManager.PointerUsed = false;
             OnDragFinished(transform.position, uObject.Location);
         }
 

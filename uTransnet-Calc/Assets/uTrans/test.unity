@@ -3724,14 +3724,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 75090401}
-  _terminalPrefab: {fileID: 1860605206661222, guid: 2a6aacf8db9795642bc5917ce051837f,
+  _terminalPrefab: {fileID: 1074004978142796, guid: 874806a624aecaf428f2954ace593297,
     type: 2}
-  _pylonPrefab: {fileID: 1578489113416600, guid: 9278275414ce4834a9ee3b5244b9cef8,
+  _pylonPrefab: {fileID: 1318328367175826, guid: 424e6b3dc605d6f459c1dcda41511863,
     type: 2}
-  _linkPrefab: {fileID: 1837309675280410, guid: 9fe9b4eeea96b54449e839b52930d9b7,
+  _linkPrefab: {fileID: 1884246523636086, guid: 9fe9b4eeea96b54449e839b52930d9b7,
     type: 2}
   cam: {fileID: 1432818142}
-  defaultLinkDistance: 200
+  minLinkDistance: 150
+  maxLinkDistance: 250
   debugText: {fileID: 503979617}
 --- !u!4 &1234826373
 Transform:
@@ -3924,10 +3925,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea206d6134066bd45a93ad0ec6249c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseObject: {fileID: 0}
   spawnScale: 0.04
   fixedScale: 1
   heightShift: 25
-  _altitude: 0
+  altitude: 0
   map: {fileID: 75090401}
   _location:
     x: 0

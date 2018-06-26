@@ -1,7 +1,6 @@
+using Mapbox.Unity.Map;
 using UnityEngine;
 using uTrans.Calc;
-using uTrans.Data;
-using uTrans.Services;
 
 namespace uTrans.Components
 {
@@ -15,6 +14,8 @@ namespace uTrans.Components
         public PointProps pointProps;
         [SerializeField]
         public DraggableObject draggableObject;
+        [SerializeField]
+        public ObjectWithHeight objectWithHeight;
 
 
         [SerializeField]
@@ -28,7 +29,6 @@ namespace uTrans.Components
             {
                 return pointProps.pointType;
             }
-
             set
             {
                 pointProps.pointType = value;
@@ -36,15 +36,13 @@ namespace uTrans.Components
                 {
                     case uTrans.Calc.PointType.Terminal:
                         objectRenderer.material = heavyMaterial;
-                    break;
+                        break;
                     case uTrans.Calc.PointType.AnchorPylon:
                         objectRenderer.material = lightMaterial;
-                    break;
+                        break;
                 }
             }
         }
-
-
 
 
         [SerializeField]
@@ -68,12 +66,39 @@ namespace uTrans.Components
             }
         }
 
-        void Start()
+        void Awake()
         {
-            onMapObject.OnLocationUpdate += vectorD => {
-                debugText.text = "Point altitude: " + pointProps.Altitude + "m";
-                debugText.text += "\nTerrain type: " + pointProps.Terrain.ToString("g");
-            };
+            onMapObject.OnLocationUpdate += DrawDebug;
+            objectWithHeight.OnHeightChanged += DrawDebug;
+        }
+
+        private void DrawDebug()
+        {
+            debugText.text = "Point altitude: " + pointProps.Altitude + "m";
+            debugText.text += "\nPoint height: " + pointProps.Height + "m";
+            debugText.text += "\nTerrain type: " + pointProps.Terrain.ToString("g");
+        }
+
+        public void Up()
+        {
+            objectWithHeight.Up();
+        }
+
+        public void Down()
+        {
+            objectWithHeight.Down();
+        }
+
+        public void SetMap(AbstractMap map)
+        {
+            onMapObject.SetMap(map);
+            objectWithHeight.SetMap(map);
+        }
+
+        public void SetBuildingManager(SpawnOnMapD buildingManager)
+        {
+            draggableObject.buildingManager = buildingManager;
+            pin.GetComponent<DraggableObject>().buildingManager = buildingManager;
         }
 
     }

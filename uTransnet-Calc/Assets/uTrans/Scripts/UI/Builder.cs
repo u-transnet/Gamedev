@@ -76,9 +76,10 @@ namespace uTrans.UI
         private void Update()
         {
 
-            GameObject activePoint = spawnManager.ActivePoint;
-            if (activePoint != null)
+            GameObject activePointGO = spawnManager.ActivePoint;
+            if (activePointGO != null)
             {
+                BasePoint activePoint = activePointGO.GetComponent<BasePoint>();
                 GameObject prevPoint = spawnManager.PrevPoint;
                 if (prevPoint != null)
                 {
@@ -88,7 +89,7 @@ namespace uTrans.UI
                     {*/
                         GameObject activeLink = spawnManager.ActiveLink;
                         bool collidingLink = (activeLink != null) ? activeLink.GetComponentInChildren<CollidingObject>().Colliding : false;
-                        yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding && !collidingLink;
+                        yesButton.interactable = !activePoint.collidingObject.Colliding && !collidingLink;
                     /*}
                     else
                     {
@@ -97,12 +98,21 @@ namespace uTrans.UI
                 }
                 else
                 {
-                    yesButton.interactable = !activePoint.GetComponent<CollidingObject>().Colliding;
+                    yesButton.interactable = !activePoint.collidingObject.Colliding;
                 }
 
                 noButton.interactable = true;
                 newPointCanBeSpawned = false;
                 doneButton.interactable = false;
+
+                if(Input.GetKeyUp(KeyCode.Plus) || Input.GetKeyUp(KeyCode.KeypadPlus))
+                {
+                    activePoint.Up();
+                }
+                else if(Input.GetKeyUp(KeyCode.Minus) || Input.GetKeyUp(KeyCode.KeypadMinus))
+                {
+                    activePoint.Down();
+                }
             }
             else
             {

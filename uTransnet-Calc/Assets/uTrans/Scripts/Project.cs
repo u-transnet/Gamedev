@@ -46,13 +46,17 @@ namespace uTrans
                                     ProjectDTO.Id,
                                     onMapObject.Location.x,
                                     onMapObject.Location.y,
+                                    basePoint.objectWithHeight.Height,
                                     basePoint.pointProps.pointType
                             ).Id;
                         }
                         else
                         {
-                            DataService.instance.PointDAO.UpdateLocation(
-                                    componentId.Value, onMapObject.Location.x, onMapObject.Location.y
+                            DataService.instance.PointDAO.UpdateLocationAndHeight(
+                                    componentId.Value,
+                                    onMapObject.Location.x,
+                                    onMapObject.Location.y,
+                                    basePoint.objectWithHeight.Height
                             );
                         }
 
@@ -67,6 +71,7 @@ namespace uTrans
                         var baseLink = link.GetComponent<BaseLink>();
                         if (componentId.Value < 0) // Not yet saved link
                         {
+                            Debug.Log("Saving link " + componentId.Value);
                             componentId.Value = DataService.instance.LinkDAO.New(
                                     ProjectDTO.Id,
                                     baseLink.FirstPoint.id.Value,
