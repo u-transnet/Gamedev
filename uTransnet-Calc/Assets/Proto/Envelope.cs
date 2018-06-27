@@ -35,28 +35,32 @@ namespace uTrans.Proto {
             "cmVzZXRfaWQYAiABKAsyHi51dHJhbnNjYWxjLlJlcXVlc3QuT3B0aW9uYWxJ",
             "ZBooCgpPcHRpb25hbElkEg4KBmlzX3NldBgBIAEoCBIKCgJpZBgCIAEoAyIi",
             "CgZQcmVzZXQSCgoCaWQYASABKAMSDAoEbmFtZRgCIAEoCSI0Cg5QcmVzZXRN",
-            "YXRlcmlhbBITCgttYXRlcmlhbF9pZBgBIAEoAxINCgVwcmljZRgCIAEoBSJC",
-            "CghNYXRlcmlhbBIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEgwKBHVuaXQY",
-            "AyABKAkSDgoGaW5jb21lGAQgASgIIlYKCkJhc2VPYmplY3QSCgoCaWQYASAB",
-            "KAMSDAoEbmFtZRgCIAEoCRIMCgR0eXBlGAMgASgFEg8KB21pblNpemUYBCAB",
-            "KAUSDwoHbWF4U2l6ZRgFIAEoBSJSChJCYXNlT2JqZWN0TWF0ZXJpYWwSEwoL",
-            "bWF0ZXJpYWxfaWQYASABKAMSDgoGYW1vdW50GAIgASgFEhcKD29uX2V4cGxv",
-            "aXRhdGlvbhgDIAEoCCIkCgVFcnJvchIKCgJpZBgBIAEoAxIPCgdtZXNzYWdl",
+            "YXRlcmlhbBITCgttYXRlcmlhbF9pZBgBIAEoAxINCgVwcmljZRgCIAEoBSJV",
+            "CghNYXRlcmlhbBIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEh8KBHVuaXQY",
+            "AyABKA4yES51dHJhbnNjYWxjLlVuaXRzEg4KBmluY29tZRgEIAEoCCJWCgpC",
+            "YXNlT2JqZWN0EgoKAmlkGAEgASgDEgwKBG5hbWUYAiABKAkSDAoEdHlwZRgD",
+            "IAEoBRIPCgdtaW5TaXplGAQgASgFEg8KB21heFNpemUYBSABKAUimAEKEkJh",
+            "c2VPYmplY3RNYXRlcmlhbBITCgttYXRlcmlhbF9pZBgBIAEoAxIOCgZhbW91",
+            "bnQYAiABKAUSFwoPb25fZXhwbG9pdGF0aW9uGAMgASgIEhUKDXVzZXJfZWRp",
+            "dGFibGUYBCABKAgSFAoMZ3JvdXBfbnVtYmVyGAUgASgFEhcKD251bWJlcl9p",
+            "bl9ncm91cBgGIAEoBSIkCgVFcnJvchIKCgJpZBgBIAEoAxIPCgdtZXNzYWdl",
             "GAIgASgJKosBCgRUeXBlEgsKB3Vua25vd24QABIPCgtsaXN0UHJlc2V0cxAB",
             "EhYKEmdldFByZXNldE1hdGVyaWFscxACEhMKD2xpc3RCYXNlT2JqZWN0cxAD",
             "EiUKIWdldFJlcXVpcmVkTWF0ZXJpYWxzRm9yQmFzZU9iamVjdBAEEhEKDWxp",
-            "c3RNYXRlcmlhbHMQBUI4Ch9jb20uZ2l0aHViLnV0cmFuc25ldC51dHJhbnNj",
-            "YWxjQgZQcm90b3OqAgx1VHJhbnMuUHJvdG9iBnByb3RvMw=="));
+            "c3RNYXRlcmlhbHMQBSo3CgVVbml0cxIHCgN1c2QQABIGCgJrZxABEgUKAXQQ",
+            "AhIFCgFtEAMSBgoCa20QBBIHCgNjbnQQBUI4Ch9jb20uZ2l0aHViLnV0cmFu",
+            "c25ldC51dHJhbnNjYWxjQgZQcm90b3OqAgx1VHJhbnMuUHJvdG9iBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::uTrans.Proto.Type), }, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::uTrans.Proto.Type), typeof(global::uTrans.Proto.Units), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Envelope), global::uTrans.Proto.Envelope.Parser, new[]{ "Type", "Presets", "PresetMaterials", "BaseObjects", "Materials", "RequiredMaterials" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Request), global::uTrans.Proto.Request.Parser, new[]{ "Type", "PresetId" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Request.Types.OptionalId), global::uTrans.Proto.Request.Types.OptionalId.Parser, new[]{ "IsSet", "Id" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Preset), global::uTrans.Proto.Preset.Parser, new[]{ "Id", "Name" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.PresetMaterial), global::uTrans.Proto.PresetMaterial.Parser, new[]{ "MaterialId", "Price" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Material), global::uTrans.Proto.Material.Parser, new[]{ "Id", "Name", "Unit", "Income" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.BaseObject), global::uTrans.Proto.BaseObject.Parser, new[]{ "Id", "Name", "Type", "MinSize", "MaxSize" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.BaseObjectMaterial), global::uTrans.Proto.BaseObjectMaterial.Parser, new[]{ "MaterialId", "Amount", "OnExploitation" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.BaseObjectMaterial), global::uTrans.Proto.BaseObjectMaterial.Parser, new[]{ "MaterialId", "Amount", "OnExploitation", "UserEditable", "GroupNumber", "NumberInGroup" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::uTrans.Proto.Error), global::uTrans.Proto.Error.Parser, new[]{ "Id", "Message" }, null, null, null)
           }));
     }
@@ -71,6 +75,15 @@ namespace uTrans.Proto {
     [pbr::OriginalName("listBaseObjects")] ListBaseObjects = 3,
     [pbr::OriginalName("getRequiredMaterialsForBaseObject")] GetRequiredMaterialsForBaseObject = 4,
     [pbr::OriginalName("listMaterials")] ListMaterials = 5,
+  }
+
+  public enum Units {
+    [pbr::OriginalName("usd")] Usd = 0,
+    [pbr::OriginalName("kg")] Kg = 1,
+    [pbr::OriginalName("t")] T = 2,
+    [pbr::OriginalName("m")] M = 3,
+    [pbr::OriginalName("km")] Km = 4,
+    [pbr::OriginalName("cnt")] Cnt = 5,
   }
 
   #endregion
@@ -331,7 +344,7 @@ namespace uTrans.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Request(Request other) : this() {
       type_ = other.type_;
-      PresetId = other.presetId_ != null ? other.PresetId.Clone() : null;
+      presetId_ = other.presetId_ != null ? other.presetId_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1007,12 +1020,12 @@ namespace uTrans.Proto {
 
     /// <summary>Field number for the "unit" field.</summary>
     public const int UnitFieldNumber = 3;
-    private string unit_ = "";
+    private global::uTrans.Proto.Units unit_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Unit {
+    public global::uTrans.Proto.Units Unit {
       get { return unit_; }
       set {
-        unit_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        unit_ = value;
       }
     }
 
@@ -1052,7 +1065,7 @@ namespace uTrans.Proto {
       int hash = 1;
       if (Id != 0L) hash ^= Id.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
-      if (Unit.Length != 0) hash ^= Unit.GetHashCode();
+      if (Unit != 0) hash ^= Unit.GetHashCode();
       if (Income != false) hash ^= Income.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1075,9 +1088,9 @@ namespace uTrans.Proto {
         output.WriteRawTag(18);
         output.WriteString(Name);
       }
-      if (Unit.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Unit);
+      if (Unit != 0) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) Unit);
       }
       if (Income != false) {
         output.WriteRawTag(32);
@@ -1097,8 +1110,8 @@ namespace uTrans.Proto {
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
-      if (Unit.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Unit);
+      if (Unit != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Unit);
       }
       if (Income != false) {
         size += 1 + 1;
@@ -1120,7 +1133,7 @@ namespace uTrans.Proto {
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
-      if (other.Unit.Length != 0) {
+      if (other.Unit != 0) {
         Unit = other.Unit;
       }
       if (other.Income != false) {
@@ -1145,8 +1158,8 @@ namespace uTrans.Proto {
             Name = input.ReadString();
             break;
           }
-          case 26: {
-            Unit = input.ReadString();
+          case 24: {
+            unit_ = (global::uTrans.Proto.Units) input.ReadEnum();
             break;
           }
           case 32: {
@@ -1428,6 +1441,9 @@ namespace uTrans.Proto {
       materialId_ = other.materialId_;
       amount_ = other.amount_;
       onExploitation_ = other.onExploitation_;
+      userEditable_ = other.userEditable_;
+      groupNumber_ = other.groupNumber_;
+      numberInGroup_ = other.numberInGroup_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1469,6 +1485,39 @@ namespace uTrans.Proto {
       }
     }
 
+    /// <summary>Field number for the "user_editable" field.</summary>
+    public const int UserEditableFieldNumber = 4;
+    private bool userEditable_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool UserEditable {
+      get { return userEditable_; }
+      set {
+        userEditable_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "group_number" field.</summary>
+    public const int GroupNumberFieldNumber = 5;
+    private int groupNumber_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int GroupNumber {
+      get { return groupNumber_; }
+      set {
+        groupNumber_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "number_in_group" field.</summary>
+    public const int NumberInGroupFieldNumber = 6;
+    private int numberInGroup_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int NumberInGroup {
+      get { return numberInGroup_; }
+      set {
+        numberInGroup_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as BaseObjectMaterial);
@@ -1485,6 +1534,9 @@ namespace uTrans.Proto {
       if (MaterialId != other.MaterialId) return false;
       if (Amount != other.Amount) return false;
       if (OnExploitation != other.OnExploitation) return false;
+      if (UserEditable != other.UserEditable) return false;
+      if (GroupNumber != other.GroupNumber) return false;
+      if (NumberInGroup != other.NumberInGroup) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1494,6 +1546,9 @@ namespace uTrans.Proto {
       if (MaterialId != 0L) hash ^= MaterialId.GetHashCode();
       if (Amount != 0) hash ^= Amount.GetHashCode();
       if (OnExploitation != false) hash ^= OnExploitation.GetHashCode();
+      if (UserEditable != false) hash ^= UserEditable.GetHashCode();
+      if (GroupNumber != 0) hash ^= GroupNumber.GetHashCode();
+      if (NumberInGroup != 0) hash ^= NumberInGroup.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1519,6 +1574,18 @@ namespace uTrans.Proto {
         output.WriteRawTag(24);
         output.WriteBool(OnExploitation);
       }
+      if (UserEditable != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(UserEditable);
+      }
+      if (GroupNumber != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(GroupNumber);
+      }
+      if (NumberInGroup != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(NumberInGroup);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1535,6 +1602,15 @@ namespace uTrans.Proto {
       }
       if (OnExploitation != false) {
         size += 1 + 1;
+      }
+      if (UserEditable != false) {
+        size += 1 + 1;
+      }
+      if (GroupNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GroupNumber);
+      }
+      if (NumberInGroup != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(NumberInGroup);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1555,6 +1631,15 @@ namespace uTrans.Proto {
       }
       if (other.OnExploitation != false) {
         OnExploitation = other.OnExploitation;
+      }
+      if (other.UserEditable != false) {
+        UserEditable = other.UserEditable;
+      }
+      if (other.GroupNumber != 0) {
+        GroupNumber = other.GroupNumber;
+      }
+      if (other.NumberInGroup != 0) {
+        NumberInGroup = other.NumberInGroup;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1577,6 +1662,18 @@ namespace uTrans.Proto {
           }
           case 24: {
             OnExploitation = input.ReadBool();
+            break;
+          }
+          case 32: {
+            UserEditable = input.ReadBool();
+            break;
+          }
+          case 40: {
+            GroupNumber = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            NumberInGroup = input.ReadInt32();
             break;
           }
         }
