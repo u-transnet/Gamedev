@@ -108,4 +108,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-**/Proto/Envelope.cs
+uTransnet-Calc/Assets/Proto/*.cs
+uTransnet-Calc/Assets/Proto/*.cs.meta
