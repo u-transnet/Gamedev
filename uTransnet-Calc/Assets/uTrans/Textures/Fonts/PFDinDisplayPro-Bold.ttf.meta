@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 913b2dfd1c477f7468a832c8c9737a17
+timeCreated: 1530073851
+licenseType: Pro
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PF DinDisplay Pro
+  fontNames:
+  - PF DinDisplay Pro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 7c3482b18239d78408b8b0207c71ef1c, type: 3}
+  - {fileID: 12800000, guid: 4c319314a09e98444bbefb40f69c4519, type: 3}
+  - {fileID: 12800000, guid: 4eb2bd48fc3aa324392712816f5ebb3b, type: 3}
+  - {fileID: 12800000, guid: 7e39ad9bc1cd2004ea27b220530aedaa, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
